@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/ds-presentaciones-7ddc5080-ad1a-44d1-94fe-12e2f9b2fcf7/colors_and_type.css" />
+<script src="_ds/ds-presentaciones-7ddc5080-ad1a-44d1-94fe-12e2f9b2fcf7/_ds_bundle.js"></script>
+<style>
+:root{--bg:var(--rb-white);--bg2:var(--rb-tiza);--card:var(--rb-white);--line:var(--rb-gray-mid);--line2:var(--rb-tiza);--fg:var(--rb-black);--fg2:var(--rb-dark);--fg3:var(--rb-text-muted);--red:var(--rb-red);--bordo:var(--rb-bordo);--teal:var(--rb-teal);--amber:var(--rb-yellow);--gray:#B9B9B4;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+:root[data-theme="dark"]{--bg:#020202;--bg2:#0E0E0E;--card:#0B0B0B;--line:#2A2A28;--line2:#171716;--fg:#FFFFFF;--fg2:#E4E4E0;--fg3:#9A9A94;--gray:#4A4A47;}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;}
+a{color:var(--red);text-decoration:none;}
+a:hover{color:var(--bordo);text-decoration:underline;}
+input[type=checkbox]{accent-color:#FF0001;width:14px;height:14px;cursor:pointer;margin:0;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px;}
+@keyframes rbpulse{0%,100%{opacity:1}50%{opacity:.25}}
+</style>
+<script src="demo-data.js"></script>
+</helmet>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#FF0001"></rect><g transform="translate(60,54)"><path d="M40 0 L80 22 L80 66 L40 88 L0 66 L0 22 Z" fill="#FFFFFF"></path><path d="M40 14 L66 29 L66 59 L40 74 L14 59 L14 29 Z" fill="#FF0001"></path><rect x="30" y="30" width="20" height="6" rx="3" fill="#FFFFFF"></rect><rect x="30" y="42" width="20" height="6" rx="3" fill="#01BCBA"></rect><rect x="30" y="54" width="20" height="6" rx="3" fill="#FFFFFF"></rect></g></svg></template>
+<div style="min-height:100vh;background:var(--bg);color:var(--fg);font-family:'DM Sans',system-ui,sans-serif">
+
+  <header style="position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:18px;padding:12px 24px;flex-wrap:wrap">
+    <img src="assets/abeja-roja.png" alt="redbee" style="height:26px;width:auto;display:block" />
+    <div style="display:flex;flex-direction:column;gap:1px;border-left:1px solid var(--line);padding-left:18px">
+      <span style="font-size:14px;font-weight:700;letter-spacing:-0.01em">remediación automatizada de vulnerabilidades</span>
+      <span style="font-size:10.5px;color:var(--fg3);letter-spacing:0.07em;text-transform:uppercase;font-weight:700">portfolio · {{ fleetCount }} repositorios · nombres anonimizados</span>
+    </div>
+    <nav style="display:flex;gap:4px;margin-left:6px">
+      <a href="#/dashboard" style="font-size:13px;font-weight:600;padding:7px 13px;border-radius:4px;color:var(--fg)" style-hover="background:var(--bg2)">Portfolio</a>
+      <a href="#/remediados" style="font-size:13px;font-weight:600;padding:7px 13px;border-radius:4px;color:var(--fg)" style-hover="background:var(--bg2)">Remediados</a>
+    </nav>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:10px;font-size:11px;color:var(--fg3);font-weight:600">
+        <span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;background:var(--teal);border-radius:2px;display:block"></i>hecha</span>
+        <span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;background:var(--red);border-radius:2px;display:block"></i>corriendo</span>
+        <span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;background:var(--line);border-radius:2px;display:block"></i>pendiente</span>
+        <span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;background:var(--line2);border:1px solid var(--line);border-radius:2px;display:block"></i>no aplica</span>
+      </div>
+      <button onClick="{{ startGuide }}" style="font-family:inherit;font-size:12px;font-weight:600;padding:7px 12px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:4px;cursor:pointer" style-hover="border-color:var(--red);color:var(--red)">Ver guía</button>
+      <button onClick="{{ startKiosk }}" style="font-family:inherit;font-size:12px;font-weight:700;padding:7px 12px;border:none;background:var(--red);color:#fff;border-radius:4px;cursor:pointer" style-hover="background:var(--bordo)">Modo demo</button>
+      <button onClick="{{ toggleTheme }}" style="font-family:inherit;font-size:12px;font-weight:600;padding:7px 12px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:4px;cursor:pointer">{{ themeLabel }}</button>
+    </div>
+  </header>
+
+  <sc-if value="{{ isDash }}" hint-placeholder-val="{{ true }}">
+  <main style="padding:22px 24px 40px;display:flex;flex-direction:column;gap:16px;max-width:1780px;margin:0 auto">
+
+    <section data-tour="kpis" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px">
+      <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="5">
+        <div style="border:1px solid var(--line);border-radius:4px;background:var(--card);padding:15px 17px;display:flex;flex-direction:column;gap:5px">
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">{{ k.label }}</span>
+          <span style="font-size:40px;font-weight:300;line-height:0.92;letter-spacing:-0.03em">{{ k.value }}</span>
+          <span style="font-size:12px;color:var(--fg3)">{{ k.note }}</span>
+        </div>
+      </sc-for>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">
+      <sc-for list="{{ distros }}" as="d" hint-placeholder-count="3">
+        <div data-tour="{{ d.tour }}" style="border:1px solid var(--line);border-radius:4px;background:var(--card);padding:15px 17px;display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">{{ d.label }}</span>
+          <div style="display:flex;height:12px;border-radius:2px;overflow:hidden;gap:2px">
+            <sc-for list="{{ d.parts }}" as="p" hint-placeholder-count="3">
+              <i title="{{ p.title }}" style="display:block;background:{{ p.color }};width:{{ p.w }}"></i>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:14px;font-size:12px;color:var(--fg3);flex-wrap:wrap">
+            <sc-for list="{{ d.parts }}" as="p" hint-placeholder-count="3">
+              <span><b style="color:var(--fg)">{{ p.n }}</b> {{ p.k }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(390px,1fr));gap:12px">
+      <div style="border:1px solid var(--line);border-radius:4px;background:var(--card);padding:16px 18px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">Vulnerabilidades por tipo</span>
+          <span style="font-size:11px;color:var(--fg3)">corregibles · residuales</span>
+        </div>
+        <sc-for list="{{ vulnBars }}" as="v" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:baseline;gap:10px">
+              <span style="font-size:13px;font-weight:700;min-width:104px">{{ v.label }}</span>
+              <span style="font-size:24px;font-weight:300;line-height:1;letter-spacing:-0.02em">{{ v.total }}</span>
+              <span style="font-size:11.5px;color:var(--fg3);margin-left:auto;text-align:right">{{ v.detail }}</span>
+            </div>
+            <div style="display:flex;height:13px;border-radius:2px;overflow:hidden;background:var(--line2);gap:2px">
+              <i style="display:block;background:var(--teal);width:{{ v.okw }}"></i>
+              <i style="display:block;background:var(--bordo);width:{{ v.resw }}"></i>
+            </div>
+          </div>
+        </sc-for>
+        <span style="font-size:11px;color:var(--fg3);border-top:1px solid var(--line2);padding-top:9px">{{ secretsNote }}</span>
+      </div>
+
+      <div style="border:1px solid var(--line);border-radius:4px;background:var(--card);padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">Complejidad ciclomática · escala log</span>
+          <span style="font-size:11px;color:var(--fg3)">{{ complexNote }}</span>
+        </div>
+        <sc-for list="{{ complexBars }}" as="c" hint-placeholder-count="9">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:11px;color:var(--fg3);width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.name }}</span>
+            <div style="flex:1;height:10px;background:var(--line2);border-radius:2px;overflow:hidden"><i style="display:block;height:100%;background:var(--red);width:{{ c.w }}"></i></div>
+            <span style="font-size:11px;font-weight:700;width:62px;text-align:right">{{ c.val }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="border:1px solid var(--line);border-radius:4px;background:var(--card);overflow:hidden">
+      <div style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1px solid var(--line);flex-wrap:wrap">
+        <input value="{{ q }}" onInput="{{ onSearch }}" placeholder="Buscar repositorio…" style="font-family:inherit;font-size:13px;padding:7px 11px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:4px;width:210px" />
+        <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+          <select value="{{ f.value }}" onChange="{{ f.onChange }}" style="font-family:inherit;font-size:13px;padding:7px 9px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:4px">
+            <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.l }}</option></sc-for>
+          </select>
+        </sc-for>
+        <span style="font-size:12px;color:var(--fg3);margin-left:auto">{{ rowsLabel }}</span>
+      </div>
+      <div data-tour="tabla" style="max-height:64vh;overflow:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+          <thead>
+            <tr style="position:sticky;top:0;z-index:5;background:var(--bg2)">
+              <sc-for list="{{ cols }}" as="c" hint-placeholder-count="10">
+                <th data-tour="col-{{ c.tour }}" onClick="{{ c.sort }}" style="padding:9px 10px;font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--fg3);border-bottom:1px solid var(--line);cursor:pointer;white-space:nowrap;text-align:{{ c.align }}">{{ c.label }} {{ c.arrow }}</th>
+              </sc-for>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ rows }}" as="r" hint-placeholder-count="14">
+              <tr data-tour="{{ r.tour }}" tabindex="0" onClick="{{ r.open }}" onKeyDown="{{ r.key }}" style="cursor:pointer;border-bottom:1px solid var(--line2)" style-hover="background:var(--bg2)">
+                <td style="padding:6px 10px;font-weight:600;white-space:nowrap">{{ r.slug }}</td>
+                <td style="padding:6px 10px"><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:{{ r.typeBg }};color:{{ r.typeFg }}">{{ r.type }}</span></td>
+                <td style="padding:6px 10px;color:var(--fg3);white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis">{{ r.stack }}</td>
+                <td style="padding:6px 10px;text-align:right;white-space:nowrap">{{ r.loc }} <span style="color:var(--fg3);font-weight:700;font-size:10px">{{ r.size }}</span></td>
+                <td style="padding:6px 10px"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span style="font-weight:600">{{ r.dv }}</span><i style="display:block;height:6px;border-radius:999px;background:var(--bordo);width:{{ r.dvw }}"></i></div></td>
+                <td style="padding:6px 10px"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span style="font-weight:600">{{ r.cv }}</span><i style="display:block;height:6px;border-radius:999px;background:var(--red);width:{{ r.cvw }}"></i></div></td>
+                <td style="padding:6px 10px"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span style="font-weight:600">{{ r.sv }}</span><i style="display:block;height:6px;border-radius:999px;background:var(--amber);width:{{ r.svw }}"></i></div></td>
+                <td data-tour="{{ r.tourPot }}" style="padding:6px 10px;text-align:right;font-weight:700;color:{{ r.potColor }}">{{ r.pot }}</td>
+                <td style="padding:6px 10px;text-align:right;color:var(--fg3);white-space:nowrap">{{ r.eta }}</td>
+                <td data-tour="{{ r.tourRing }}" style="padding:4px 10px">
+                  <div title="{{ r.ringTitle }}" aria-label="{{ r.ringTitle }}" role="img" style="position:relative;width:34px;height:34px;margin:0 auto">
+                    <div style="position:absolute;inset:0;border-radius:50%;-webkit-mask:radial-gradient(farthest-side,transparent 61%,#000 63%);mask:radial-gradient(farthest-side,transparent 61%,#000 63%);background:{{ r.ring }}"></div>
+                    <div style="position:absolute;inset:0;border-radius:50%;animation:rbpulse 1.3s ease-in-out infinite;-webkit-mask:radial-gradient(farthest-side,transparent 61%,#000 63%);mask:radial-gradient(farthest-side,transparent 61%,#000 63%);background:{{ r.ringLive }}"></div>
+                    <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700">{{ r.pct }}</span>
+                  </div>
+                </td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+      <div style="padding:9px 13px;border-top:1px solid var(--line);font-size:11px;color:var(--fg3)">Nombres de repositorio anonimizados. Conteos, severidades, unidades y tiempos de review son reales; el estado de avance y las proyecciones de tiempo y costo son estimados de demo.</div>
+    </section>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ isRepo }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:22px 24px 40px;display:flex;flex-direction:column;gap:14px;max-width:1780px;margin:0 auto">
+    <a href="#/dashboard" style="font-size:12px;font-weight:600;color:var(--fg3)">← Volver al portfolio</a>
+
+    <div data-tour="repo-header" style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px">
+      <h1 style="margin:0;font-size:32px;font-weight:700;letter-spacing:-0.02em;line-height:1">{{ rSlug }}</h1>
+      <span style="font-size:12.5px;color:var(--fg3)">{{ rStack }}</span>
+      <div data-tour="repo-facts" style="margin-left:auto;display:flex;gap:22px;flex-wrap:wrap">
+        <sc-for list="{{ rFacts }}" as="f" hint-placeholder-count="4">
+          <div style="display:flex;flex-direction:column;gap:1px">
+            <span style="font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--fg3)">{{ f.k }}</span>
+            <span style="font-size:14px;font-weight:700;color:{{ f.color }}">{{ f.v }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <section data-tour="hero" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px">
+      <div data-tour="hero-tipo" style="border:1px solid var(--line);border-radius:4px;background:var(--card);padding:20px 22px;display:flex;gap:20px;align-items:center">
+        <div style="width:96px;height:110px;flex:none;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;background:{{ typeHexBg }}">
+          <span style="font-size:52px;font-weight:700;line-height:1;color:{{ typeHexFg }}">{{ rType }}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">Tipo de proyecto</span>
+          <span style="font-size:20px;font-weight:700;line-height:1.05">{{ typeHeadline }}</span>
+          <span style="display:block;width:72px;height:2px;background:var(--red)"></span>
+          <span style="font-size:12px;color:var(--fg3);line-height:1.45">{{ typeRationale }}</span>
+        </div>
+      </div>
+
+      <div style="border:1px solid var(--line);border-radius:4px;background:var(--card);padding:20px 22px;display:flex;gap:20px;align-items:center">
+        <div style="width:96px;height:110px;flex:none;background:var(--fg);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center">
+          <span style="font-size:52px;font-weight:700;color:var(--bg);line-height:1">{{ rSize }}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;min-width:0;flex:1">
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">Tamaño y complejidad</span>
+          <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+            <span style="font-size:30px;font-weight:300;letter-spacing:-0.02em;line-height:1">{{ rLoc }}</span>
+            <span style="font-size:12px;color:var(--fg3)">LOC · {{ rSizeNote }}</span>
+          </div>
+          <sc-for list="{{ sizeBars }}" as="s" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:11px;color:var(--fg3);width:92px">{{ s.k }}</span>
+              <div style="flex:1;height:7px;background:var(--line2);border-radius:999px;overflow:hidden"><i style="display:block;height:100%;background:var(--teal);width:{{ s.w }}"></i></div>
+              <span style="font-size:12px;font-weight:700;width:62px;text-align:right">{{ s.v }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="border:1px solid var(--line);border-radius:4px;background:var(--card);padding:20px 22px;display:flex;gap:20px;align-items:center">
+        <div style="position:relative;width:116px;height:116px;flex:none">
+          <div style="position:absolute;inset:0;border-radius:50%;-webkit-mask:radial-gradient(farthest-side,transparent 66%,#000 68%);mask:radial-gradient(farthest-side,transparent 66%,#000 68%);background:{{ potRing }}"></div>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px">
+            <span style="font-size:28px;font-weight:700;line-height:1;letter-spacing:-0.02em">{{ potPct }}</span>
+            <span style="font-size:9.5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg3)">remediable</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;min-width:0">
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">Potencial de remediación</span>
+          <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;line-height:1.2">
+            <span style="font-size:30px;font-weight:700;line-height:1;color:var(--teal)">{{ potFixable }}</span>
+            <span style="font-size:12.5px;color:var(--fg3);white-space:nowrap">de {{ potTotal }} vulnerabilidades</span>
+          </div>
+          <span style="font-size:12px;color:var(--fg3);line-height:1.45">{{ potNote }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(370px,1fr));gap:14px">
+      <div style="border:1px solid var(--line);border-radius:4px;background:var(--card);padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">Tamaño vs. complejidad en el portfolio</span>
+          <span style="font-size:11px;color:var(--fg3)">ambos ejes en escala log</span>
+        </div>
+        <div style="position:relative;height:220px;border-left:1px solid var(--line);border-bottom:1px solid var(--line)">
+          <sc-for list="{{ scatter }}" as="p" hint-placeholder-count="12">
+            <div title="{{ p.title }}" style="position:absolute;border-radius:50%;transform:translate(-50%,50%);left:{{ p.x }};bottom:{{ p.y }};width:{{ p.s }};height:{{ p.s }};background:{{ p.c }}"></div>
+          </sc-for>
+          <span style="position:absolute;font-size:11px;font-weight:700;color:var(--red);left:{{ meLabelX }};bottom:{{ meLabelY }}">{{ meLabel }}</span>
+        </div>
+        <span style="font-size:11px;color:var(--fg3)">{{ scatterNote }}</span>
+      </div>
+
+      <div data-tour="plan-levels" style="border:1px solid var(--line);border-radius:4px;background:var(--card);padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">Plan de dependencias por nivel</span>
+          <span style="font-size:11px;color:var(--fg3)">{{ planNote }}</span>
+        </div>
+        <sc-for list="{{ levelBars }}" as="l" hint-placeholder-count="5">
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;align-items:baseline;gap:10px">
+              <span style="font-size:12.5px;font-weight:700">{{ l.name }}</span>
+              <span style="font-size:11px;color:var(--fg3)">{{ l.meta }}</span>
+              <span style="margin-left:auto;font-size:17px;font-weight:700;color:{{ l.color }}">{{ l.val }}</span>
+            </div>
+            <div style="height:12px;background:var(--line2);border-radius:2px;overflow:hidden"><i style="display:block;height:100%;background:{{ l.color }};width:{{ l.w }}"></i></div>
+          </div>
+        </sc-for>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--fg3);border-top:1px solid var(--line2);padding-top:9px">
+          <span style="display:flex;align-items:center;gap:6px"><i style="width:9px;height:9px;background:var(--teal);border-radius:2px;display:block"></i>se corrige</span>
+          <span style="display:flex;align-items:center;gap:6px"><i style="width:9px;height:9px;background:var(--amber);border-radius:2px;display:block"></i>requiere migración arquitectural</span>
+          <span style="display:flex;align-items:center;gap:6px"><i style="width:9px;height:9px;background:var(--bordo);border-radius:2px;display:block"></i>sin fix disponible</span>
+        </div>
+      </div>
+    </section>
+
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-top:6px">
+      <h2 style="margin:0;font-size:20px;font-weight:700;letter-spacing:-0.01em">Selección de vulnerabilidades a reparar</h2>
+      <span style="font-size:12.5px;color:var(--fg3)">cada cambio recalcula unidades de trabajo, tiempo y costo</span>
+    </div>
+
+    <section style="display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:14px;align-items:start">
+      <div style="border:1px solid var(--line);border-radius:4px;background:var(--card);overflow:hidden;min-width:0">
+        <div style="display:flex;border-bottom:1px solid var(--line)">
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.go }}" style="font-family:inherit;font-size:13px;font-weight:700;padding:12px 20px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:{{ t.color }};border-bottom-color:{{ t.bc }}">{{ t.label }}</button>
+          </sc-for>
+        </div>
+        <div data-tour="bulk" style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:9px 13px;background:var(--bg2);border-bottom:1px solid var(--line)">
+          <sc-for list="{{ bulk }}" as="b" hint-placeholder-count="5">
+            <button onClick="{{ b.act }}" style="font-family:inherit;font-size:11.5px;font-weight:600;padding:5px 10px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;cursor:pointer" style-hover="border-color:var(--red);color:var(--red)">{{ b.label }}</button>
+          </sc-for>
+          <span style="margin-left:auto;font-size:12px;font-weight:700">{{ selLabel }}</span>
+        </div>
+        <div data-tour="grid" style="height:430px;overflow:auto">
+          <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+            <div data-tour="{{ g.tour }}" style="border-bottom:1px solid var(--line)">
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 13px;background:var(--card);position:sticky;top:0;z-index:3;border-bottom:1px solid var(--line2)">
+                <button onClick="{{ g.toggleAll }}" aria-label="Seleccionar grupo" style="width:15px;height:15px;border:1.5px solid var(--fg3);border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;color:#fff;font-size:10px;line-height:1;flex:none;background:{{ g.boxBg }};border-color:{{ g.boxBd }}">{{ g.boxMark }}</button>
+                <button onClick="{{ g.toggleOpen }}" style="font-family:inherit;background:none;border:none;cursor:pointer;color:var(--fg);font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:8px;padding:0;text-align:left;min-width:0">
+                  <span style="color:var(--fg3);font-size:9px">{{ g.chev }}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:420px">{{ g.title }}</span>
+                </button>
+                <span style="font-size:11.5px;color:var(--fg3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ g.meta }}</span>
+                <span style="margin-left:auto;font-size:11px;font-weight:700;color:var(--fg3);white-space:nowrap">{{ g.count }}</span>
+              </div>
+              <sc-if value="{{ g.open }}" hint-placeholder-val="{{ true }}">
+                <div>
+                  <sc-for list="{{ g.rows }}" as="i" hint-placeholder-count="4">
+                    <div style="display:grid;grid-template-columns:22px minmax(90px,1.15fr) minmax(90px,1.05fr) 70px 64px 68px minmax(60px,1fr) 92px;align-items:center;gap:8px;padding:5px 13px;border-bottom:1px solid var(--line2);font-size:12px;opacity:{{ i.op }}">
+                      <input type="checkbox" checked="{{ i.checked }}" disabled="{{ i.disabled }}" onChange="{{ i.toggle }}" aria-label="{{ i.aria }}" />
+                      <span style="font-family:var(--mono);font-size:11.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:{{ i.strike }}" title="{{ i.nameFull }}">{{ i.name }}</span>
+                      <span style="color:var(--fg3);font-family:var(--mono);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ i.targetFull }}">{{ i.target }}</span>
+                      <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;justify-self:start;background:{{ i.sevBg }};color:{{ i.sevFg }}">{{ i.sev }}</span>
+                      <span style="font-size:11px;color:var(--fg3);font-weight:700">{{ i.kind }}</span>
+                      <span style="font-size:11px;color:var(--fg3)">{{ i.scope }}</span>
+                      <span style="font-size:11px;color:var(--fg3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ i.infoFull }}">{{ i.info }}</span>
+                      <span style="font-size:10px;font-weight:700;text-align:right;color:{{ i.flagColor }}">{{ i.flag }}</span>
+                    </div>
+                  </sc-for>
+                  <sc-if value="{{ g.truncated }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:6px 13px 8px 43px;font-size:11px;color:var(--fg3);font-style:italic">{{ g.truncNote }}</div>
+                  </sc-if>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <aside data-tour="estimacion" style="position:sticky;top:76px;border:1px solid var(--line);border-radius:4px;background:var(--card);display:flex;flex-direction:column">
+        <div style="padding:13px 15px;border-bottom:1px solid var(--line)">
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">Estimación en vivo</span>
+        </div>
+        <div style="padding:13px 15px;display:flex;flex-direction:column;gap:11px">
+          <sc-for list="{{ estPhases }}" as="e" hint-placeholder-count="4">
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <div style="display:flex;align-items:baseline;gap:8px">
+                <span style="font-size:12.5px;font-weight:700;font-family:var(--mono)">{{ e.name }}</span>
+                <span style="margin-left:auto;font-size:14px;font-weight:700">{{ e.time }}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:10.5px;color:var(--fg3);white-space:nowrap">{{ e.units }}</span>
+                <div style="flex:1;height:5px;background:var(--line2);border-radius:999px;overflow:hidden"><i style="display:block;height:100%;background:var(--teal);width:{{ e.w }}"></i></div>
+                <span style="font-size:10.5px;color:var(--fg3);width:62px;text-align:right">{{ e.cost }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ hasL4 }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:11px 15px;border-top:1px solid var(--line);background:var(--bg2);display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:10.5px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--amber)">Nivel 4 · aparte</span>
+            <span style="font-size:12px;color:var(--fg2)">{{ l4Label }}</span>
+            <span style="font-size:11px;color:var(--fg3)">no se aplica automáticamente: requiere migración arquitectural coordinada</span>
+          </div>
+        </sc-if>
+        <div style="padding:13px 15px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px;background:var(--bg2)">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+            <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">Tiempo de fix</span>
+            <span style="font-size:28px;font-weight:700;letter-spacing:-0.02em;line-height:1">{{ estTotalTime }}</span>
+          </div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+            <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">Costo de fix</span>
+            <span style="font-size:19px;font-weight:700">{{ estTotalCost }}</span>
+          </div>
+        </div>
+        <div style="padding:13px 15px;display:flex;flex-direction:column;gap:7px;border-top:1px solid var(--line)">
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;gap:8px"><span style="color:var(--fg3)">Se corrigen</span><b style="color:var(--teal)">{{ estFixed }}</b></div>
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;gap:8px"><span style="color:var(--fg3)">Quedan abiertas</span><b style="color:var(--bordo)">{{ estOpen }}</b></div>
+          <div style="display:flex;height:10px;border-radius:2px;overflow:hidden;background:var(--line2)"><i style="display:block;background:var(--teal);width:{{ estFixedW }}"></i></div>
+          <span style="font-size:11px;color:var(--fg3)">{{ estNote }}</span>
+        </div>
+        <div style="padding:11px 15px;border-top:1px solid var(--line)">
+          <button onClick="{{ runAll }}" disabled="{{ running }}" style="width:100%;font-family:inherit;font-size:14px;font-weight:700;padding:13px;background:var(--red);color:#fff;border:none;border-radius:4px;cursor:pointer" style-hover="background:var(--bordo)">{{ runLabel }}</button>
+          <span style="display:block;margin-top:9px;font-size:10.5px;color:var(--fg3);line-height:1.45">Tiempo y costo son proyecciones del modelo de estimación, no corridas medidas. Escalan con el tiempo de compilación del repo ({{ compileNote }}).</span>
+        </div>
+      </aside>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:12px;margin-top:6px">
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+        <h2 style="margin:0;font-size:20px;font-weight:700;letter-spacing:-0.01em">Fases de remediación</h2>
+        <span style="font-size:12.5px;color:var(--fg3)">{{ phasesNote }}</span>
+        <span style="font-size:11.5px;font-weight:700;color:var(--red)">se ejecutan en secuencia: fixdeps → fixcode → fixsecrets</span>
+      </div>
+      <div data-tour="fases" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px">
+        <sc-for list="{{ phaseCards }}" as="p" hint-placeholder-count="3">
+          <div style="border:1px solid var(--line);border-radius:4px;background:var(--card);padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;align-items:center;gap:16px">
+              <div style="position:relative;width:84px;height:84px;flex:none">
+                <div style="position:absolute;inset:0;border-radius:50%;-webkit-mask:radial-gradient(farthest-side,transparent 64%,#000 66%);mask:radial-gradient(farthest-side,transparent 64%,#000 66%);background:{{ p.ring }}"></div>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><span style="font-size:20px;font-weight:700;line-height:1">{{ p.pct }}</span></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                <span style="font-size:15px;font-weight:700;font-family:var(--mono)">{{ p.key }}</span>
+                <span style="font-size:12.5px;color:var(--fg3)">{{ p.units }}</span>
+                <span style="font-size:12.5px;font-weight:700;color:{{ p.stateColor }}">{{ p.stateLabel }}</span>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:11px 0">
+              <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg3)">Corrige</span><b style="font-size:19px">{{ p.fixes }}</b></div>
+              <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg3)">Tiempo</span><b style="font-size:19px">{{ p.time }}</b></div>
+              <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg3)">Costo</span><b style="font-size:19px">{{ p.cost }}</b></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="height:6px;background:var(--line2);border-radius:999px;overflow:hidden"><i style="display:block;height:100%;transition:width .35s linear;background:{{ p.stateColor }};width:{{ p.barW }}"></i></div>
+              <span style="font-size:11px;font-family:var(--mono);color:var(--fg3);min-height:15px">{{ p.msg }}</span>
+            </div>
+            <button onClick="{{ p.run }}" disabled="{{ p.disabled }}" style="width:100%;font-family:inherit;font-size:13.5px;font-weight:700;padding:12px;border:none;border-radius:4px;cursor:pointer;background:{{ p.btnBg }};color:{{ p.btnFg }}">{{ p.btnLabel }}</button>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="border:1px solid var(--line);border-radius:4px;background:var(--bg2);padding:18px 22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px">
+      <sc-for list="{{ afterStats }}" as="a" hint-placeholder-count="4">
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <span style="font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--fg3)">{{ a.k }}</span>
+          <span style="font-size:24px;font-weight:700;color:{{ a.color }}">{{ a.v }}</span>
+        </div>
+      </sc-for>
+    </section>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ isRem }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:22px 24px 40px;display:flex;flex-direction:column;gap:14px;max-width:1780px;margin:0 auto">
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em">Repositorios remediados</h1>
+      <span style="font-size:13px;color:var(--fg3)">{{ remSummary }}</span>
+    </div>
+    <sc-for list="{{ remRepos }}" as="r" hint-placeholder-count="4">
+      <section style="border:1px solid var(--line);border-radius:4px;background:var(--card);overflow:hidden">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:13px 17px;border-bottom:1px solid var(--line)">
+          <a href="{{ r.href }}" style="font-size:18px;font-weight:700;color:var(--fg)">{{ r.slug }}</a>
+          <span style="font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:999px;background:{{ r.typeBg }};color:{{ r.typeFg }}">{{ r.type }}</span>
+          <span style="font-size:12px;color:var(--fg3)">{{ r.stack }}</span>
+          <span style="margin-left:auto;font-size:10.5px;font-weight:700;padding:4px 11px;border-radius:999px;background:{{ r.qaBg }};color:{{ r.qaFg }}">{{ r.qaState }}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr))">
+          <div style="padding:13px 17px;border-right:1px solid var(--line2);display:flex;flex-direction:column;gap:7px">
+            <span style="font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--fg3)">Dependencias</span>
+            <div style="display:flex;align-items:baseline;gap:6px"><span style="font-size:28px;font-weight:700;line-height:1">{{ r.depFixed }}</span><span style="font-size:12px;color:var(--fg3)">corregidas de {{ r.depTotal }}</span></div>
+            <div style="height:8px;background:var(--line2);border-radius:999px;overflow:hidden"><i style="display:block;height:100%;background:var(--teal);width:{{ r.depW }}"></i></div>
+            <span style="font-size:11.5px;font-weight:600;color:{{ r.depRestColor }}">{{ r.depRest }}</span>
+          </div>
+          <div style="padding:13px 17px;border-right:1px solid var(--line2);display:flex;flex-direction:column;gap:5px">
+            <span style="font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--fg3)">Código y secretos</span>
+            <div style="display:flex;justify-content:space-between;font-size:12px;gap:8px"><span style="color:var(--fg3)">hallazgos SAST</span><b>{{ r.code }}</b></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;gap:8px"><span style="color:var(--fg3)">secretos activos</span><b>{{ r.secrets }}</b></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;gap:8px"><span style="color:var(--fg3)">unidades de trabajo</span><b>{{ r.units }}</b></div>
+          </div>
+          <div style="padding:13px 17px;border-right:1px solid var(--line2);display:flex;flex-direction:column;gap:5px">
+            <span style="font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--fg3)">Estimado por fase</span>
+            <sc-for list="{{ r.phases }}" as="p" hint-placeholder-count="3">
+              <div style="display:flex;justify-content:space-between;font-size:12px;gap:8px"><span style="font-family:var(--mono);color:var(--fg3)">{{ p.name }}</span><b>{{ p.time }} · {{ p.cost }}</b></div>
+            </sc-for>
+            <div style="display:flex;justify-content:space-between;font-size:13px;border-top:1px solid var(--line2);padding-top:5px;margin-top:2px;gap:8px"><span style="font-weight:700">total</span><b>{{ r.totalTime }} · {{ r.totalCost }}</b></div>
+          </div>
+          <div style="padding:13px 17px;display:flex;flex-direction:column;gap:5px">
+            <span style="font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--fg3)">Pull request (simulado)</span>
+            <span style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--red)">{{ r.prLabel }}</span>
+            <span style="font-size:12px;color:var(--fg3)">{{ r.prMeta }}</span>
+            <span style="font-size:11.5px;color:var(--fg3);font-family:var(--mono)">{{ r.prBranch }}</span>
+          </div>
+        </div>
+        <div data-tour="{{ r.tourFlows }}" style="border-top:1px solid var(--line);padding:13px 17px;display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <span style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg3)">Flujos impactados — verificación manual de QA</span>
+            <span style="font-size:12px;font-weight:700">{{ r.qaCount }}</span>
+            <div style="flex:1;min-width:110px;max-width:280px;height:6px;background:var(--line2);border-radius:999px;overflow:hidden"><i style="display:block;height:100%;background:var(--red);width:{{ r.qaW }}"></i></div>
+          </div>
+          <div style="display:flex;flex-direction:column;border:1px solid var(--line2);border-radius:4px;overflow:hidden">
+            <sc-for list="{{ r.flows }}" as="f" hint-placeholder-count="4">
+              <label style="display:grid;grid-template-columns:22px minmax(170px,1.1fr) 96px minmax(180px,1.5fr) 170px;align-items:center;gap:10px;padding:7px 12px;border-bottom:1px solid var(--line2);font-size:12px;cursor:pointer" style-hover="background:var(--bg2)">
+                <input type="checkbox" checked="{{ f.checked }}" onChange="{{ f.toggle }}" aria-label="{{ f.aria }}" />
+                <span style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ f.nameFull }}">{{ f.name }}</span>
+                <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;justify-self:start;border:1px solid var(--line);color:var(--fg3)">{{ f.kind }}</span>
+                <span style="color:var(--fg3);font-family:var(--mono);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ f.detailFull }}">{{ f.detail }}</span>
+                <span style="font-size:11px;color:var(--fg3);text-align:right">{{ f.stamp }}</span>
+              </label>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </sc-for>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ tourOn }}" hint-placeholder-val="{{ false }}">
+  <div>
+    <div aria-hidden="true" style="position:fixed;pointer-events:none;z-index:900;border-radius:6px;box-shadow:0 0 0 9999px rgba(2,2,2,0.72);outline:2px solid var(--red);outline-offset:2px;transition:{{ spotTransition }};left:{{ spotX }};top:{{ spotY }};width:{{ spotW }};height:{{ spotH }};opacity:{{ spotOpacity }}"></div>
+
+    <sc-if value="{{ plateOn }}" hint-placeholder-val="{{ false }}">
+      <div role="dialog" aria-live="polite" style="position:fixed;inset:0;z-index:940;background:rgba(2,2,2,0.9);display:flex;align-items:center;justify-content:center;padding:6vw">
+        <div style="max-width:1000px;display:flex;flex-direction:column;gap:16px;align-items:flex-start">
+          <span style="font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);font-size:{{ eyebrowSize }}">{{ stepEyebrow }}</span>
+          <h2 style="margin:0;font-weight:700;letter-spacing:-0.02em;line-height:1.05;color:#fff;font-size:{{ plateTitleSize }}">{{ stepTitle }}</h2>
+          <span style="display:block;width:96px;height:3px;background:var(--red)"></span>
+          <p style="margin:0;line-height:1.5;color:#E4E4E0;max-width:820px;font-size:{{ plateBodySize }}">{{ stepBody }}</p>
+          <sc-if value="{{ hasDiagram }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;align-items:center">
+              <sc-for list="{{ diagram }}" as="n" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="border-radius:4px;padding:10px 16px;font-family:var(--mono);font-weight:700;border:1px solid {{ n.color }};color:{{ n.color }};font-size:{{ diagramSize }}">{{ n.label }}</div>
+                  <span style="color:#666660;font-size:{{ diagramSize }}">{{ n.arrow }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <sc-for list="{{ tourControls }}" as="c" hint-placeholder-count="4">
+              <button onClick="{{ c.act }}" style="font-family:inherit;font-weight:700;padding:9px 15px;border-radius:4px;cursor:pointer;border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-size:{{ controlSize }}">{{ c.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ bubbleOn }}" hint-placeholder-val="{{ false }}">
+      <div role="dialog" aria-live="polite" tabindex="-1" style="position:fixed;z-index:950;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--red);border-radius:6px;box-shadow:0 18px 50px rgba(2,2,2,0.45);display:flex;flex-direction:column;gap:8px;padding:{{ bubblePad }};left:{{ bubbleX }};top:{{ bubbleY }};width:{{ bubbleW }}">
+        <span style="font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--red);font-size:{{ eyebrowSize }}">{{ stepEyebrow }}</span>
+        <span style="font-weight:700;letter-spacing:-0.01em;line-height:1.15;font-size:{{ titleSize }}">{{ stepTitle }}</span>
+        <span style="line-height:1.5;color:var(--fg2);font-size:{{ bodySize }}">{{ stepBody }}</span>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap">
+          <sc-for list="{{ tourControls }}" as="c" hint-placeholder-count="4">
+            <button onClick="{{ c.act }}" style="font-family:inherit;font-weight:700;border-radius:4px;cursor:pointer;display:flex;align-items:center;gap:8px;padding:8px 13px;border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-size:{{ controlSize }}">
+              <sc-if value="{{ c.ring }}" hint-placeholder-val="{{ false }}">
+                <i style="width:15px;height:15px;border-radius:50%;display:block;background:{{ stepRing }}"></i>
+              </sc-if>
+              {{ c.label }}
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <div style="position:fixed;left:0;right:0;bottom:0;z-index:960;background:rgba(2,2,2,0.35);height:{{ tourBarH }}">
+      <div style="height:100%;background:var(--red);transition:width .3s linear;width:{{ tourProgress }}"></div>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1600,&quot;height&quot;:1000},&quot;temaInicial&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light' | 'dark'&quot;,&quot;section&quot;:&quot;Demo&quot;},&quot;qaResponsable&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;QA · m.rodriguez&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Demo&quot;}}">
+class Component extends DCLogic {
+  state = {
+    route: (typeof location !== 'undefined' && location.hash) || '#/dashboard',
+    theme: 'light', sortK: 'linesOfCode', sortD: -1,
+    q: '', fType: 'todos', fSize: 'todos', fLang: 'todos', fStage: 'todos',
+    tab: 'deps', sel: {}, selInit: {}, open: {},
+    phRun: {}, phDone: {}, phPct: {}, phMsg: {}, phRes: {}, qa: {}
+  };
+
+  componentDidMount(){
+    this.onHash = () => this.setState({ route: location.hash || '#/dashboard' });
+    window.addEventListener('hashchange', this.onHash);
+    if (!window.RB_DATA) this.poll = setInterval(() => { if (window.RB_DATA) { clearInterval(this.poll); this.forceUpdate(); } }, 60);
+    let qa = {}, th = 'light';
+    try { qa = JSON.parse(localStorage.getItem('rb-qa-v2') || '{}'); th = localStorage.getItem('rb-theme') || this.props.temaInicial || 'light'; } catch(e){}
+    document.documentElement.setAttribute('data-theme', th);
+    this.setState({ qa, theme: th });
+    if ((location.hash || '').indexOf('#/tour') === 0) setTimeout(() => { location.hash = '#/dashboard'; this.tourStart(true); }, 400);
+  }
+  componentWillUnmount(){
+    window.removeEventListener('hashchange', this.onHash);
+    if (this.poll) clearInterval(this.poll);
+    Object.keys(this.timers || {}).forEach(k => clearInterval(this.timers[k]));
+    this.tourUnbind();
+  }
+
+  // ---------- format ----------
+  n(v){ return (v || 0).toLocaleString('es-AR'); }
+  t(sec){
+    const s = Math.max(0, Math.round(sec));
+    if (!s) return '—';
+    if (s < 60) return s + 's';
+    const m = Math.round(s/60);
+    if (m < 60) return m + 'm';
+    const h = Math.floor(m/60);
+    return h >= 24 ? this.n(h) + 'h' : h + 'h ' + String(m%60).padStart(2,'0') + 'm';
+  }
+  usd(v){ return 'USD ' + (v || 0).toFixed(2).replace('.', ','); }
+  sevLabel(s){ return { CRITICAL:'Critical', HIGH:'High', MEDIUM:'Medium', LOW:'Low' }[s] || s || '—'; }
+  sevBg(s){ return { CRITICAL:'var(--bordo)', HIGH:'var(--red)', MEDIUM:'var(--amber)', LOW:'var(--line)' }[s] || 'var(--line)'; }
+  sevFg(s){ return (s === 'MEDIUM' || s === 'LOW' || !s) ? 'var(--fg)' : '#FFFFFF'; }
+  typeBg(t){ return t === 'B' ? 'var(--red)' : (t === 'A' ? 'var(--teal)' : 'var(--line)'); }
+  typeFg(t){ return (t === 'A' || t === 'B') ? '#FFFFFF' : 'var(--fg3)'; }
+  phColor(st){ return { done:'var(--teal)', running:'var(--red)', pending:'var(--line)', 'not-applicable':'var(--line2)' }[st] || 'var(--line)'; }
+  donut(pct, color){ const deg = Math.round(pct*3.6); return 'conic-gradient(' + color + ' 0deg ' + deg + 'deg, var(--line) ' + deg + 'deg 360deg)'; }
+  hash(s){ let h = 0; for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) >>> 0; return h; }
+
+  ring(phases, live){
+    return 'conic-gradient(' + phases.map((p,i) => {
+      const col = live ? (p.status === 'running' ? 'var(--red)' : 'transparent') : (p.status === 'running' ? 'transparent' : this.phColor(p.status));
+      const a = i*90, b = a + 84;
+      return col + ' ' + a + 'deg ' + b + 'deg, transparent ' + b + 'deg ' + (a+90) + 'deg';
+    }).join(', ') + ')';
+  }
+  progress(phases){
+    const w = phases.filter(p => p.status !== 'not-applicable');
+    if (!w.length) return 1;
+    return w.reduce((a,p) => a + (p.status === 'done' ? 1 : (p.status === 'running' ? 0.5 : 0)), 0) / w.length;
+  }
+
+  // ---------- selection ----------
+  slug(){ const m = /^#\/repo\/(.+)$/.exec(this.state.route); return m ? decodeURIComponent(m[1]) : null; }
+
+  itemsFor(slug){
+    const d = window.RB_DATA.repositories[slug];
+    if (!d) return { deps: [], l4: [], code: [], secrets: [], codeReal: {}, secretReal: {} };
+    if (this._itemsSlug === slug) return this._items;
+    const deps = [], l4 = [];
+    (d.dependencies.plan.levels || []).forEach(l => {
+      (l.updates || []).forEach((u,i) => {
+        const it = Object.assign({ id: 'd:' + l.level + ':' + u.package + ':' + i, level: l.level, applied: l.applied !== false }, u);
+        (l.applied === false ? l4 : deps).push(it);
+      });
+    });
+    const code = [], codeReal = {};
+    (d.sast.files || []).forEach((f,fi) => {
+      Object.keys(f.severityCounts || {}).forEach(sv => codeReal[fi + '|' + sv] = f.severityCounts[sv]);
+      (f.findings || []).forEach((x,i) => code.push({ id: 's:' + fi + ':' + i, fi, file: f.file, sev: x.severity, rule: x.rule, line: x.line, message: x.message }));
+    });
+    const secrets = [], secretReal = {};
+    (d.secrets.files || []).forEach((f,fi) => {
+      secretReal[fi] = f.active !== undefined ? f.active : f.total;
+      (f.findings || []).forEach((x,i) => secrets.push({ id: 'k:' + fi + ':' + i, fi, file: f.file, tipo: x.type, line: x.line, verified: !!x.verified, fp: !!x.falsePositive }));
+    });
+    this._itemsSlug = slug;
+    this._items = { deps, l4, code, secrets, codeReal, secretReal };
+    return this._items;
+  }
+
+  selFor(slug){
+    if (this.state.sel[slug]) return this.state.sel[slug];
+    const it = this.itemsFor(slug), s = {};
+    it.deps.forEach(d => s[d.id] = true);
+    it.code.forEach(c => s[c.id] = true);
+    it.secrets.forEach(k => { if (!k.fp) s[k.id] = true; });
+    return s;
+  }
+  writeSel(slug, next){ this.setState(st => ({ sel: Object.assign({}, st.sel, { [slug]: next }) })); }
+  setSel(slug, ids, val){
+    const next = Object.assign({}, this.selFor(slug));
+    ids.forEach(id => next[id] = val);
+    this.writeSel(slug, next);
+  }
+  only(slug, all, ids){
+    const next = Object.assign({}, this.selFor(slug));
+    all.forEach(id => next[id] = false);
+    ids.forEach(id => next[id] = true);
+    this.writeSel(slug, next);
+  }
+
+  estimate(slug){
+    const D = window.RB_DATA, row = D.fleet.repositories.filter(r => r.slug === slug)[0];
+    const M = D.meta.estimationModel, C = row ? row.compileTimeSeconds || 0 : 0;
+    const it = this.itemsFor(slug), sel = this.selFor(slug), O = M.phaseOverheadSeconds;
+    const UD = row.unitDetail || { sastFiles:0, secretTypes:0, secretFiles:0 };
+
+    // fixdeps: los updates de niveles 1-3 vienen completos en el JSON, se cuentan uno a uno
+    const depSel = it.deps.filter(d => sel[d.id]);
+    let depT = 0, depC = 0;
+    depSel.forEach(d => {
+      if (d.requiresCodeChange) { depT += M.fixdeps.codeChangeSeconds + M.fixdeps.codeChangeCompileFactor*C; depC += M.fixdeps.codeChangeUsd; }
+      else { depT += M.fixdeps.bumpSeconds + M.fixdeps.bumpCompileFactor*C; depC += M.fixdeps.bumpUsd; }
+    });
+    const l4Sel = it.l4.filter(d => sel[d.id]);
+    let l4T = 0, l4C = 0;
+    l4Sel.forEach(d => { l4T += M.fixdeps.codeChangeSeconds + M.fixdeps.codeChangeCompileFactor*C; l4C += M.fixdeps.codeChangeUsd; });
+
+    // fixcode y fixsecrets: el detalle está recortado (meta.caps), así que la base es el
+    // total real del repo y sólo se descuenta lo que el usuario deselecciona entre lo visible
+    const codePairs = {};
+    it.code.forEach(c => {
+      const k = c.fi + '|' + c.sev;
+      if (!codePairs[k]) codePairs[k] = { on:false, real: it.codeReal[k] || 0 };
+      if (sel[c.id]) codePairs[k].on = true;
+    });
+    const codeOff = Object.keys(codePairs).filter(k => !codePairs[k].on);
+    const codeUnits = Math.max(0, UD.sastFiles - codeOff.length);
+    const codeHidden = Math.max(0, UD.sastFiles - Object.keys(codePairs).length);
+    const codeFixes = Math.max(0, row.vulnerabilities.code - codeOff.reduce((a,k) => a + codePairs[k].real, 0));
+    const codeT = codeUnits ? codeUnits * (M.fixcode.secondsPerFile + M.fixcode.compileFactor*C) + O : 0;
+    const codeC = codeUnits * M.fixcode.usdPerFile;
+
+    const secFileMap = {}, secTypeMap = {};
+    it.secrets.forEach(k => {
+      if (!k.fp) {
+        if (!secFileMap[k.fi]) secFileMap[k.fi] = { on:false, real: it.secretReal[k.fi] || 0 };
+        if (sel[k.id]) secFileMap[k.fi].on = true;
+      }
+      if (!secTypeMap[k.tipo]) secTypeMap[k.tipo] = false;
+      if (sel[k.id]) secTypeMap[k.tipo] = true;
+    });
+    const secFilesOff = Object.keys(secFileMap).filter(f => !secFileMap[f].on);
+    const secTypesOff = Object.keys(secTypeMap).filter(t => !secTypeMap[t]);
+    const secFileUnits = Math.max(0, UD.secretFiles - secFilesOff.length);
+    const secTypeUnits = Math.max(0, UD.secretTypes - secTypesOff.length);
+    const secHiddenFiles = Math.max(0, UD.secretFiles - Object.keys(secFileMap).length);
+    const secFixes = Math.max(0, row.vulnerabilities.secretsActive - secFilesOff.reduce((a,f) => a + secFileMap[f].real, 0));
+    const secT = (secFileUnits || secTypeUnits)
+      ? secTypeUnits*M.fixsecrets.triageSecondsPerType + secFileUnits*(M.fixsecrets.secondsPerFile + M.fixsecrets.compileFactor*C) + O : 0;
+    const secC = secTypeUnits*M.fixsecrets.triageUsdPerType + secFileUnits*M.fixsecrets.usdPerFile;
+
+    const ph = [
+      { name:'review', units:'ejecutada', t: row.reviewSeconds || 0, c: row.reviewSeconds ? M.reviewUsd : 0, fixes: 0 },
+      { name:'fixdeps', units: depSel.length + ' de ' + it.deps.length + ' librerías', t: depSel.length ? depT + O : 0, c: depC, fixes: depSel.reduce((a,d)=>a+(d.fixesCount||0),0) },
+      { name:'fixcode', units: this.n(codeUnits) + ' de ' + this.n(UD.sastFiles) + ' unidades (archivo × severidad)', t: codeT, c: codeC, fixes: codeFixes },
+      { name:'fixsecrets', units: secTypeUnits + ' tipos · ' + this.n(secFileUnits) + ' de ' + this.n(UD.secretFiles) + ' archivos', t: secT, c: secC, fixes: secFixes }
+    ];
+    return {
+      ph, total: ph.slice(1).reduce((a,p)=>a+p.t,0), cost: ph.slice(1).reduce((a,p)=>a+p.c,0),
+      depSel, l4Sel, codeSel: it.code.filter(c => sel[c.id]), secSel: it.secrets.filter(k => sel[k.id]),
+      codeUnits, codeHidden, secTypeUnits, secFileUnits, secHiddenFiles,
+      secTypes: Object.keys(secTypeMap).filter(t => secTypeMap[t]), secFiles: Object.keys(secFileMap).filter(f => secFileMap[f].on),
+      l4: { t: l4Sel.length ? l4T + O : 0, c: l4C, fixes: l4Sel.reduce((a,d)=>a+(d.fixesCount||0),0), n: l4Sel.length },
+      fixes: ph[1].fixes + ph[2].fixes + ph[3].fixes, compile: C
+    };
+  }
+
+  ORDER = ['fixdeps','fixcode','fixsecrets'];
+
+  phaseStatus(slug, key){
+    const rk = slug + ':' + key;
+    if (this.state.phDone[rk]) return 'done';
+    if (this.state.phRun[rk]) return 'running';
+    const row = window.RB_DATA.fleet.repositories.filter(r => r.slug === slug)[0];
+    const p = row ? row.demoState.phases.filter(x => x.phase === key)[0] : null;
+    return p ? p.status : 'pending';
+  }
+  blockedBy(slug, key){
+    const i = this.ORDER.indexOf(key);
+    for (let n = 0; n < i; n++) {
+      const st = this.phaseStatus(slug, this.ORDER[n]);
+      if (st !== 'done' && st !== 'not-applicable') return this.ORDER[n];
+    }
+    return null;
+  }
+  nextAfter(slug, key){
+    const i = this.ORDER.indexOf(key);
+    for (let n = i + 1; n < this.ORDER.length; n++) {
+      const st = this.phaseStatus(slug, this.ORDER[n]);
+      if (st === 'pending') return this.ORDER[n];
+    }
+    return null;
+  }
+
+  startPhase(slug, key, chain){
+    const k = slug + ':' + key;
+    if (this.state.phRun[k] || this.state.phDone[k]) return;
+    if (this.blockedBy(slug, key)) return;
+    if (this.ORDER.some(p => this.state.phRun[slug + ':' + p])) return;
+    if (chain) this.chain = true;
+    this.timers = this.timers || {};
+    const est = this.estimate(slug), idx = { fixdeps:1, fixcode:2, fixsecrets:3 }[key];
+    const p = est.ph[idx];
+    if (!p.t) return;
+    const snap = { units: p.units, t: p.t, c: p.c, fixes: p.fixes };
+    const labels = {
+      fixdeps: est.depSel.slice(0,4).map((d,i) => 'step ' + (i+1) + '/' + est.depSel.length + ' — ' + d.package),
+      fixcode: Array.from(new Set(est.codeSel.map(c => c.file.split('/').pop()))).slice(0,4),
+      fixsecrets: est.secTypes.slice(0,3).map(t => 'triage ' + t).concat(['reescritura de ' + est.secFiles.length + ' archivos'])
+    }[key].concat(['commit + gate verde']);
+    const set = o => this.setState(s => { const n = {}; Object.keys(o).forEach(f => n[f] = Object.assign({}, s[f], o[f])); return n; });
+    set({ phRun: { [k]:true }, phPct: { [k]:0 }, phMsg: { [k]: labels[0] }, phRes: { [k]: snap } });
+    let i = 0;
+    this.timers[k] = setInterval(() => {
+      i++;
+      set({ phPct: { [k]: Math.min(100, i*10) }, phMsg: { [k]: labels[Math.min(labels.length-1, Math.floor(i/2))] } });
+      if (i >= 10) {
+        clearInterval(this.timers[k]);
+        set({ phRun: { [k]:false }, phDone: { [k]:true }, phMsg: { [k]:'commiteado · gate verde' } });
+        if (this.chain) {
+          const nx = this.nextAfter(slug, key);
+          if (nx) setTimeout(() => this.startPhase(slug, nx, true), 500);
+          else this.chain = false;
+        }
+      }
+    }, 420);
+  }
+
+  saveQa(qa){ this.setState({ qa }); try { localStorage.setItem('rb-qa-v2', JSON.stringify(qa)); } catch(e){} }
+
+  flowsFor(slug){
+    const d = window.RB_DATA.repositories[slug];
+    if (!d) return [];
+    const out = [];
+    const ups = [];
+    (d.dependencies.plan.levels || []).forEach(l => { if (l.applied !== false) (l.updates || []).forEach(u => ups.push(u)); });
+    ups.sort((a,b) => (b.fixesCount||0) - (a.fixesCount||0)).slice(0,4).forEach(u => out.push({
+      name: 'Regresión por ' + u.package, kind: 'dependencia',
+      detail: (u.currentVersion || '—') + ' → ' + (u.targetPackage || u.targetVersion || 'cambio de fuente')
+    }));
+    (d.sast.files || []).slice(0,3).forEach(f => out.push({ name: f.file.split('/').pop(), kind: 'código', detail: f.total + ' hallazgos · ' + f.file }));
+    if ((d.secrets.active || 0) > 0) out.push({ name: 'Configuración y credenciales', kind: 'secretos', detail: (d.secrets.activeFiles || 0) + ' archivos con secretos activos' });
+    out.push({ name: 'Smoke test de toda la app', kind: 'transversal', detail: 'build + suite de tests completa' });
+    return out.map((f,i) => Object.assign({ fid: slug + ':' + i }, f));
+  }
+
+  // ================= guía interactiva =================
+  tourState(){ return this.state.tour || { on:false, kiosk:false, i:0, paused:false, elapsed:0, spot:null, bubble:null }; }
+  setTour(patch){ this.setState(st => ({ tour: Object.assign({}, this.tourState(), patch) })); }
+
+  pickDemoRepos(){
+    if (this._demo) return this._demo;
+    const R = window.RB_DATA.fleet.repositories, detail = window.RB_DATA.repositories;
+    const score = r => {
+      const d = detail[r.slug];
+      if (!d) return -1;
+      const swap = (d.dependencies.plan.levels||[]).some(l => (l.updates||[]).some(u => u.targetPackage));
+      return (r.type === 'B' ? 4 : 0) + (r.potential > 0 ? 3 : 0) + (r.vulnerabilities.code > 0 ? 2 : 0)
+        + (r.vulnerabilities.secretsActive > 0 ? 2 : 0) + (swap ? 3 : 0) + ((d.classification.blocking||[]).length ? 2 : 0);
+    };
+    const main = R.slice().sort((a,b) => score(b) - score(a))[0];
+    const topSecret = R.slice().sort((a,b) => b.vulnerabilities.secretsActive - a.vulnerabilities.secretsActive)[0];
+    const remediated = R.filter(r => r.demoState.stage === 'remediated')[0] || R[0];
+    this._demo = { main, topSecret, remediated };
+    return this._demo;
+  }
+
+  tourSteps(){
+    if (this._steps) return this._steps;
+    const D = window.RB_DATA, F = D.fleet, n = v => this.n(v);
+    const dm = this.pickDemoRepos(), main = dm.main, topSecret = dm.topSecret, remediated = dm.remediated;
+    const md = D.repositories[main.slug];
+    const totalV = F.totals.dependencies + F.totals.code + F.totals.secretsActive;
+    const langs = Object.keys(F.distributions.byLanguage).length;
+    const swapLevel = (md.dependencies.plan.levels||[]).filter(l => (l.updates||[]).some(u => u.targetPackage))[0];
+    const swap = swapLevel ? swapLevel.updates.filter(u => u.targetPackage)[0] : null;
+    const b0 = (md.classification.blocking||[])[0];
+    const blockName = b0 ? (typeof b0 === 'string' ? b0 : (b0.packageName || b0.package || b0.name)) : null;
+    const brokenBuilds = F.repositories.filter(r => !r.compiles).length;
+    const worstBaseline = F.repositories.slice().sort((a,b)=>b.testBaselineFailing-a.testBaselineFailing)[0];
+
+    const st = [
+      { act:0, plate:true, seconds:8, title:'Remediación de vulnerabilidades, de punta a punta',
+        body:'Detectar es la parte fácil. Esta herramienta corrige, verifica que no rompió nada, y le dice a QA exactamente qué volver a probar.' },
+      { act:0, seconds:10, route:'#/dashboard', target:'[data-tour="kpis"]', title: F.repositoryCount + ' repositorios, ' + n(totalV) + ' hallazgos',
+        body: langs + ' lenguajes y frameworks distintos: Angular, NestJS, Spring, FastAPI, ASP.NET Core, Swift, Kotlin, Go. Ningún equipo puede con esto a mano.' },
+      { act:0, plate:true, seconds:12, title:'Review → fixdeps → fixcode → fixsecrets',
+        diagram:[['review','var(--teal)'],['fixdeps','var(--red)'],['fixcode','var(--red)'],['fixsecrets','var(--red)']],
+        body:'Review escanea y arma el plan. Las tres fases siguientes lo ejecutan en secuencia: dependencias, código y secretos. Ninguna vuelve a escanear — todas consumen lo que dejó review.' },
+      { act:0, plate:true, seconds:12, title:'Se commitea sólo si queda en verde',
+        diagram:[['aplicar','var(--fg3)'],['compilar','var(--amber)'],['tests','var(--teal)'],['commit','var(--teal)']],
+        body:'Cada unidad de trabajo se aplica, compila y corre los tests. Si el build se rompe, la IA lo arregla. Si aparece una regresión, la IA la arregla. Si igual queda en rojo, esa unidad se descarta y el proceso sigue con la siguiente.' },
+
+      { act:1, seconds:9, route:'#/dashboard', target:'[data-tour="kpis"]', title:'Todo el portfolio en una pantalla',
+        body:'Cuántos repositorios hay, de qué tipo, qué tan grandes y cuánta deuda de seguridad arrastra cada uno.' },
+      { act:1, seconds:11, route:'#/dashboard', target:'[data-tour="dist-tipo"]', title:'La clasificación que decide el alcance',
+        body:'Un proyecto tipo A se puede remediar sin tocar la arquitectura. Uno tipo B está bloqueado por un framework que exige migración. De los ' + F.repositoryCount + ', hay ' + (F.distributions.byType.A||0) + ' tipo A y ' + (F.distributions.byType.B||0) + ' tipo B.' },
+      { act:1, seconds:10, route:'#/dashboard', target:'[data-tour="tabla"]', clip:260, title:'Una fila por repositorio',
+        body:'Tipo, stack, tamaño, y las vulnerabilidades separadas en tres familias: dependencias, código y secretos. Se ordena y se filtra por cualquiera de ellas.' },
+      { act:1, seconds:13, route:'#/dashboard', target:'[data-tour="col-potential"]', pad:14, title:'Lo que va a quedar sin corregir',
+        body:'Es el número honesto: ' + n(F.totals.potential) + ' de las ' + n(F.totals.dependencies) + ' vulnerabilidades de dependencias no tienen arreglo disponible hoy. Siempre son de dependencias — el código y los secretos se corrigen completos.' },
+      { act:1, seconds:11, route:'#/dashboard', target:'[data-tour="col-prog"]', pad:14, title:'Cuatro segmentos, una fase cada uno',
+        body:'Turquesa lo terminado, rojo animado lo que está corriendo, gris lo pendiente. Si un repositorio no tiene secretos, esa fase queda neutra: no hay nada que hacer.' },
+      { act:1, seconds:11, route:'#/dashboard', target:'[data-tour="row-' + topSecret.slug + '"]', title:'El repositorio con más secretos expuestos',
+        body: topSecret.slug + ' concentra ' + n(topSecret.vulnerabilities.secretsActive) + ' de los ' + n(F.totals.secretsActive) + ' secretos del portfolio. Casi seguro es entropía de bundles vendorizados — exactamente el caso donde el triage automático vale más que la corrección.' },
+
+      { act:2, seconds:9, route:'#/repo/' + main.slug, target:'[data-tour="repo-header"]', title: main.slug + ', tipo ' + main.type,
+        body: main.stack + ': ' + n(main.linesOfCode) + ' líneas, ' + n(main.testCases) + ' tests, ' + n(main.vulnerabilities.dependencies) + ' vulnerabilidades de dependencias, ' + n(main.vulnerabilities.code) + ' de código y ' + n(main.vulnerabilities.secretsActive) + ' secretos activos.' },
+      { act:2, seconds:11, route:'#/repo/' + main.slug, target:'[data-tour="hero-tipo"]', title: blockName ? 'Un solo paquete lo bloquea' : 'Remediable sin tocar la arquitectura',
+        body: blockName ? blockName + ' es un componente arquitectural: actualizarlo obliga a migrar toda su cadena de forma coordinada. Eso saca al proyecto del alcance automático.'
+          : 'No hay dependencias arquitecturales: todo el plan se puede aplicar con el flujo automático.' },
+      { act:2, seconds:10, route:'#/repo/' + main.slug, target:'[data-tour="hero"]', clip:280, title:'Cada familia se corrige distinto',
+        body:'Las dependencias se actualizan, el código se reescribe, los secretos se trían y se sacan. Son tres motores diferentes con el mismo gate de verificación.' },
+      { act:2, seconds:14, route:'#/repo/' + main.slug, target:'[data-tour="plan-levels"]', title:'De menor a mayor riesgo',
+        body:'Nivel 1, upgrades menores. Nivel 2, actualizaciones sin impacto arquitectural. Nivel 3, cambio de librería. Nivel 4, migración de framework. Se aplican en ese orden, y el nivel 4 no se aplica solo: es la frontera.' },
+      { act:2, seconds:13, route:'#/repo/' + main.slug, tab:'deps', expand: swapLevel ? ['n' + swapLevel.level] : [], target: swapLevel ? '[data-tour="grupo-n' + swapLevel.level + '"]' : '[data-tour="grid"]',
+        clip:220, title:'Cambiar de librería, no sólo de versión',
+        body: swap ? swap.package + ' no tiene versión que la arregle. El plan la sustituye por ' + swap.targetPackage + ' y la IA reescribe los puntos de uso. Ningún bot de actualización hace esto.'
+          : 'Cuando no hay versión con fix, el plan reemplaza la librería y la IA reescribe los puntos de uso.' },
+      { act:2, seconds:12, route:'#/repo/' + main.slug, tab:'deps', expand:['res'], target:'[data-tour="grupo-res"]', clip:220, title:'Lo que no tiene arreglo',
+        body: (md.dependencies.plan.residualByPackage||[]).length + ' paquetes, ' + n(md.dependencies.plan.residualTotal||0) + ' vulnerabilidades sin fix. No se seleccionan porque no hay nada que aplicar. Esta sección es la que explica la columna Residual de la vista anterior.' },
+      { act:2, seconds:12, route:'#/repo/' + main.slug, tab:'deps', selectCritical:true, target:'[data-tour="bulk"]', title:'Por criticidad, por nivel, por archivo',
+        body:'Se elige de a uno o en bloque. Acá dejamos sólo las críticas y altas, y todo lo demás se recalcula al instante.' },
+      { act:2, seconds:13, route:'#/repo/' + main.slug, target:'[data-tour="estimacion"]', clip:340, title:'La estimación se mueve con la selección',
+        body:'Tiempo y costo por fase, calculados sobre las unidades de trabajo reales y el tiempo de compilación de este repositorio. Compilar acá tarda ' + this.t(main.compileTimeSeconds) + ': por eso cada paso verificado se paga caro.' },
+
+      { act:3, seconds:13, route:'#/repo/' + main.slug, target:'[data-tour="fases"]', clip:320, title:'Las tres fases, una después de la otra',
+        body:'fixdeps, fixcode y fixsecrets no corren en paralelo: cada una espera el gate verde de la anterior. Así una regresión siempre tiene un único culpable.' },
+      { act:3, seconds:13, route:'#/repo/' + main.slug, target:'[data-tour="repo-facts"]', title:'Paridad, no verde absoluto',
+        body:'Review guarda el resultado de cada test antes de tocar nada. El gate exige que siga pasando lo que ya pasaba. En este portfolio hay ' + brokenBuilds + ' repositorios que ni compilan y uno con ' + worstBaseline.testBaselineFailing + ' tests en rojo: sin baseline, no habría forma de distinguir una regresión de la deuda que ya estaba.' },
+
+      { act:4, seconds:14, route:'#/remediados', target:'[data-tour="flows-' + remediated.slug + '"]', clip:300, title:'Un PR y un plan de regresión',
+        body:'Al final del proceso sale un pull request con todos los cambios verificados, y un informe que traduce cada cambio a las pantallas y endpoints que toca. QA no tiene que adivinar qué probar: lo tacha de una lista.' },
+      { act:4, plate:true, seconds:6, closing:true, title:'Detectar, corregir, verificar, entregar', body:'Y volver a empezar.' }
+    ];
+    this._steps = st.map((x,i) => Object.assign({ idx:i }, x));
+    return this._steps;
+  }
+
+  tourStart(kiosk){
+    this.tourStartedAt = Date.now();
+    this.setTour({ on:true, kiosk: !!kiosk, i:0, paused: !kiosk, elapsed:0 });
+    this.tourApply(0, true);
+    this.tourBind();
+  }
+  tourExit(){
+    this.setTour({ on:false, kiosk:false, paused:true, spot:null, bubble:null });
+    this.tourUnbind();
+  }
+  tourGo(i){
+    const steps = this.tourSteps();
+    const next = (i + steps.length) % steps.length;
+    const T = this.tourState();
+    if (steps[next].closing && !T.kiosk) { this.tourExit(); return; }
+    this.setTour({ i: next, elapsed: 0 });
+    this.tourApply(next, true);
+  }
+  tourNext(){ this.tourGo(this.tourState().i + 1); }
+  tourPrev(){ this.tourGo(this.tourState().i - 1); }
+  tourPause(){ this.setTour({ paused: !this.tourState().paused }); }
+
+  tourApply(i, scroll){
+    const step = this.tourSteps()[i];
+    if (!step) return;
+    const patch = {};
+    if (step.route && step.route !== this.state.route) { location.hash = step.route; patch.route = step.route; }
+    if (step.tab) patch.tab = step.tab;
+    if (step.expand) {
+      const slug = (step.route || '').replace('#/repo/','');
+      const open = Object.assign({}, this.state.open);
+      step.expand.forEach(k => open[slug + '|' + k] = true);
+      patch.open = open;
+    }
+    if (Object.keys(patch).length) this.setState(patch);
+    if (step.selectCritical) {
+      const slug = (step.route || '').replace('#/repo/','');
+      const it = this.itemsFor(slug);
+      const all = it.deps.concat(it.l4, it.code, it.secrets).map(x => x.id);
+      const keep = it.deps.concat(it.code).filter(x => x.severity === 'CRITICAL' || x.severity === 'HIGH' || x.sev === 'CRITICAL' || x.sev === 'HIGH').map(x => x.id);
+      setTimeout(() => this.only(slug, all, keep), 30);
+    }
+    if (step.plate) { this.setTour({ spot:null, bubble:null }); return; }
+    const measure = (tries) => {
+      const el = document.querySelector(step.target);
+      if (!el) { if (tries > 0) return setTimeout(() => measure(tries-1), 150); return this.tourNext(); }
+      if (scroll) { try { el.scrollIntoView({ block:'center', behavior:'smooth' }); } catch(e) { el.scrollIntoView(); } }
+      setTimeout(() => this.tourMeasure(step), scroll ? 420 : 0);
+    };
+    measure(10);
+  }
+
+  tourMeasure(step){
+    const el = document.querySelector(step.target);
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const pad = step.pad !== undefined ? step.pad : 8;
+    const maxH = step.clip || Math.min(window.innerHeight - 120, 620);
+    const h = Math.min(r.height + pad*2, maxH);
+    const spot = { x: Math.max(4, r.left - pad), y: Math.max(4, r.top - pad), w: Math.min(r.width + pad*2, window.innerWidth - 8), h };
+    spot.h = Math.max(60, Math.min(spot.h, window.innerHeight - spot.y - 8));
+    const kiosk = this.tourState().kiosk;
+    const bw = Math.min(kiosk ? 560 : 400, window.innerWidth - 32);
+    const bh = kiosk ? 300 : 230;
+    const gap = 18;
+    let bx, by;
+    const fits = () => {
+      const below = window.innerHeight - (spot.y + spot.h), above = spot.y;
+      const right = window.innerWidth - (spot.x + spot.w), left = spot.x;
+      if (below > bh + gap) { by = spot.y + spot.h + gap; bx = Math.min(Math.max(8, spot.x), window.innerWidth - bw - 8); return true; }
+      if (above > bh + gap) { by = spot.y - bh - gap; bx = Math.min(Math.max(8, spot.x), window.innerWidth - bw - 8); return true; }
+      if (right > bw + gap) { bx = spot.x + spot.w + gap; by = Math.min(Math.max(8, spot.y), window.innerHeight - bh - 8); return true; }
+      if (left > bw + gap) { bx = spot.x - bw - gap; by = Math.min(Math.max(8, spot.y), window.innerHeight - bh - 8); return true; }
+      return false;
+    };
+    if (!fits()) {
+      // recortar el foco para que la burbuja nunca lo tape
+      const maxW = window.innerWidth - bw - gap*2 - 16;
+      if (maxW > 220) spot.w = Math.min(spot.w, maxW);
+      const maxSpotH = window.innerHeight - bh - gap*2 - 16;
+      if (spot.w > maxW && maxSpotH > 160) spot.h = Math.min(spot.h, maxSpotH);
+      if (!fits()) {
+        const topRoom = spot.y, botRoom = window.innerHeight - (spot.y + spot.h);
+        if (topRoom >= botRoom) { spot.h = Math.max(60, spot.h - (bh + gap - topRoom < 0 ? 0 : bh + gap - topRoom)); by = 8; }
+        else { by = window.innerHeight - bh - 8; spot.h = Math.max(60, Math.min(spot.h, by - gap - spot.y)); }
+        bx = Math.min(Math.max(8, spot.x), window.innerWidth - bw - 8);
+      }
+    }
+    this.setTour({ spot, bubble: { x: Math.max(8, bx), y: Math.max(8, by), w: bw } });
+  }
+
+  tourBind(){
+    if (this.tourBound) return;
+    this.tourBound = true;
+    this.tourTick = setInterval(() => {
+      const T = this.tourState();
+      if (!T.on) return;
+      const cur = this.tourSteps()[T.i];
+      if (cur && !cur.plate) {
+        const el = document.querySelector(cur.target);
+        if (el) {
+          const r = el.getBoundingClientRect();
+          const sp = T.spot;
+          if (!sp || Math.abs(sp.y - Math.max(4, r.top - (cur.pad !== undefined ? cur.pad : 8))) > 2 || Math.abs(sp.w - Math.min(r.width + (cur.pad !== undefined ? cur.pad : 8)*2, window.innerWidth - 8)) > 2) this.tourMeasure(cur);
+        }
+      }
+      if (T.kiosk && T.idleSince && Date.now() - T.idleSince > 45000 && T.paused) { this.setTour({ paused:false, idleSince:null }); return; }
+      if (T.paused) return;
+      const step = this.tourSteps()[T.i];
+      const el = Math.round((T.elapsed || 0) + 0.2);
+      if (step && el >= (step.seconds || 10)/2) this.tourNext();
+      else this.setTour({ elapsed: (T.elapsed || 0) + 0.2 });
+    }, 200);
+    this.onTourKey = e => {
+      const T = this.tourState();
+      if (!T.on) return;
+      if (e.key === 'Escape') this.tourExit();
+      else if (e.key === 'ArrowRight') this.tourNext();
+      else if (e.key === 'ArrowLeft') this.tourPrev();
+      else if (T.kiosk && Date.now() - (this.tourStartedAt || 0) > 1500) this.setTour({ paused:true, idleSince: Date.now() });
+    };
+    this.onTourMove = () => {
+      const T = this.tourState();
+      document.documentElement.style.cursor = '';
+      if (this.cursorTimer) clearTimeout(this.cursorTimer);
+      if (T.kiosk) this.cursorTimer = setTimeout(() => { document.documentElement.style.cursor = 'none'; }, 5000);
+    };
+    this.onTourInteract = e => {
+      const T = this.tourState();
+      if (!T.on || !T.kiosk || T.paused) return;
+      if (Date.now() - (this.tourStartedAt || 0) < 1500) return;
+      if (e && e.target && e.target.closest && e.target.closest('[role="dialog"]')) return;
+      this.setTour({ paused:true, idleSince: Date.now() });
+    };
+    this.onTourResize = () => {
+      const T = this.tourState();
+      const step = this.tourSteps()[T.i];
+      if (T.on && step && !step.plate) this.tourMeasure(step);
+    };
+    window.addEventListener('keydown', this.onTourKey);
+    window.addEventListener('mousemove', this.onTourMove);
+    window.addEventListener('click', this.onTourInteract);
+    window.addEventListener('resize', this.onTourResize);
+    window.addEventListener('scroll', this.onTourResize, true);
+    this.onTourMove();
+  }
+  tourUnbind(){
+    if (!this.tourBound) return;
+    this.tourBound = false;
+    clearInterval(this.tourTick);
+    if (this.cursorTimer) clearTimeout(this.cursorTimer);
+    document.documentElement.style.cursor = '';
+    window.removeEventListener('keydown', this.onTourKey);
+    window.removeEventListener('mousemove', this.onTourMove);
+    window.removeEventListener('click', this.onTourInteract);
+    window.removeEventListener('resize', this.onTourResize);
+    window.removeEventListener('scroll', this.onTourResize, true);
+  }
+
+  tourVals(){
+    const T = this.tourState(), v = {};
+    v.startGuide = () => this.tourStart(false);
+    v.startKiosk = () => this.tourStart(true);
+    v.tourOn = !!T.on;
+    if (!T.on) return v;
+    const steps = this.tourSteps(), step = steps[T.i] || steps[0], kiosk = !!T.kiosk;
+    const acts = ['Acto 0 · el problema','Acto 1 · el portfolio','Acto 2 · el proyecto','Acto 3 · el proceso','Acto 4 · el resultado'];
+    const shown = kiosk ? steps.length : steps.filter(x => !x.closing).length;
+    v.stepEyebrow = acts[step.act] + ' · paso ' + Math.min(T.i + 1, shown) + ' de ' + shown;
+    v.stepTitle = step.title; v.stepBody = step.body;
+    v.plateOn = !!step.plate; v.bubbleOn = !step.plate && !!T.spot;
+    v.hasDiagram = !!step.diagram;
+    v.diagram = (step.diagram || []).map((d,i) => ({ label:d[0], color:d[1], arrow: i < (step.diagram.length-1) ? '→' : '' }));
+    v.spotX = (T.spot ? T.spot.x : 0) + 'px'; v.spotY = (T.spot ? T.spot.y : 0) + 'px';
+    v.spotW = (T.spot ? T.spot.w : 0) + 'px'; v.spotH = (T.spot ? T.spot.h : 0) + 'px';
+    v.spotOpacity = T.spot ? '1' : '0';
+    v.spotTransition = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'none' : 'left .4s ease, top .4s ease, width .4s ease, height .4s ease';
+    v.bubbleX = (T.bubble ? T.bubble.x : 0) + 'px'; v.bubbleY = (T.bubble ? T.bubble.y : 0) + 'px';
+    v.bubbleW = (T.bubble ? T.bubble.w : 380) + 'px';
+    v.bubblePad = kiosk ? '22px 24px' : '16px 18px';
+    v.eyebrowSize = kiosk ? '15px' : '11px';
+    v.titleSize = kiosk ? '30px' : '17px';
+    v.bodySize = kiosk ? '19px' : '13.5px';
+    v.controlSize = kiosk ? '16px' : '12px';
+    v.plateTitleSize = kiosk ? '64px' : '44px';
+    v.plateBodySize = kiosk ? '26px' : '19px';
+    v.diagramSize = kiosk ? '20px' : '14px';
+    v.tourBarH = kiosk ? '6px' : '4px';
+    v.tourProgress = Math.round(((T.i + Math.min(1, (T.elapsed||0)/((step.seconds||10)/2)))/shown)*100) + '%';
+    const frac = kiosk || !T.paused ? Math.min(1, (T.elapsed||0)/((step.seconds||10)/2)) : 0;
+    v.stepRing = 'conic-gradient(var(--red) 0deg ' + Math.round(frac*360) + 'deg, var(--line) ' + Math.round(frac*360) + 'deg 360deg)';
+    v.tourControls = [
+      { label:'‹ Anterior', act: () => this.tourPrev(), bg:'var(--card)', fg:'var(--fg)', bd:'var(--line)' },
+      { label: T.paused ? 'Reanudar' : 'Pausar', act: () => this.tourPause(), bg:'var(--card)', fg:'var(--fg)', bd:'var(--line)' },
+      { label:'Siguiente ›', act: () => this.tourNext(), bg:'var(--red)', fg:'#fff', bd:'var(--red)', ring:true },
+      { label:'Salir', act: () => this.tourExit(), bg:'transparent', fg:'var(--fg3)', bd:'transparent' }
+    ];
+    return v;
+  }
+
+  renderVals(){
+    const S = this.state, D = window.RB_DATA, v = {};
+    v.themeLabel = S.theme === 'dark' ? 'Tema claro' : 'Tema oscuro';
+    v.toggleTheme = () => {
+      const th = this.state.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', th);
+      try { localStorage.setItem('rb-theme', th); } catch(e){}
+      this.setState({ theme: th });
+    };
+    const slug = this.slug();
+    const isRem = S.route.indexOf('#/remediados') === 0;
+    const isRepo = !!slug && !!D && !!D.repositories[slug];
+    v.isRepo = isRepo; v.isRem = isRem; v.isDash = !isRepo && !isRem;
+    Object.assign(v, this.tourVals());
+    if (!D) return v;
+
+    const F = D.fleet, R = F.repositories;
+    v.fleetCount = F.repositoryCount;
+
+    // ---------- dashboard ----------
+    const fleetEst = R.reduce((a,r) => a + (r.estimate.total.seconds - (r.reviewSeconds || 0)), 0);
+    const fleetCost = R.reduce((a,r) => a + r.estimate.total.usd, 0);
+    const units = R.reduce((a,r) => a + r.units.fixdeps + r.units.fixcode + r.units.fixsecrets, 0);
+    v.kpis = [
+      { label:'Repositorios', value: F.repositoryCount, note: R.filter(r=>r.compiles).length + ' compilan · ' + R.filter(r=>!r.compiles).length + ' con build roto' },
+      { label:'Vulnerabilidades', value: this.n(F.totals.dependencies + F.totals.code + F.totals.secretsActive), note: this.n(F.totals.dependencies) + ' deps · ' + this.n(F.totals.code) + ' código · ' + this.n(F.totals.secretsActive) + ' secretos activos' },
+      { label:'Residuales sin fix', value: this.n(F.totals.potential), note: 'quedan abiertas tras el nivel 3 del plan' },
+      { label:'Review acumulado', value: this.t(F.totals.reviewSeconds), note: this.n(F.totals.linesOfCode) + ' LOC analizadas' },
+      { label:'Fix estimado', value: this.t(fleetEst), note: this.n(units) + ' unidades · ' + this.usd(fleetCost) + ' estimado' }
+    ];
+
+    const dist = (label, obj, colors) => {
+      const tot = Object.values(obj).reduce((a,b)=>a+b,0) || 1;
+      return { label, parts: Object.keys(obj).map((k,i) => ({ k, n: obj[k], w: (obj[k]/tot*100) + '%', color: colors[i % colors.length], title: k + ': ' + obj[k] })) };
+    };
+    const langs = Object.entries(F.distributions.byLanguage).sort((a,b)=>b[1]-a[1]);
+    v.distros = [
+      Object.assign(dist('Tipo de proyecto', F.distributions.byType, ['var(--teal)','var(--red)','var(--gray)']), { tour:'dist-tipo' }),
+      Object.assign(dist('Tamaño (LOC)', F.distributions.bySize, ['var(--bordo)','var(--amber)','var(--fg2)']), { tour:'dist-size' }),
+      Object.assign(dist('Estado de avance', F.distributions.byStage, ['var(--teal)','var(--line)','var(--red)']), { tour:'dist-stage' }),
+      Object.assign(dist('Lenguaje', Object.fromEntries(langs), ['var(--fg2)','var(--teal)','var(--amber)','var(--bordo)','var(--gray)','var(--red)']), { tour:'dist-lang' })
+    ];
+
+    const dTot = F.totals.dependencies, dRes = F.totals.potential;
+    v.vulnBars = [
+      { label:'Dependencias', total:this.n(dTot), detail:this.n(dTot-dRes)+' corregibles · '+this.n(dRes)+' residuales', okw:((dTot-dRes)/dTot*100)+'%', resw:(dRes/dTot*100)+'%' },
+      { label:'Código (SAST)', total:this.n(F.totals.code), detail:'100% corregibles', okw:'100%', resw:'0%' },
+      { label:'Secretos activos', total:this.n(F.totals.secretsActive), detail:'triage por tipo + reescritura por archivo', okw:'100%', resw:'0%' }
+    ];
+    const topSec = R.slice().sort((a,b)=>b.vulnerabilities.secretsActive-a.vulnerabilities.secretsActive)[0];
+    v.secretsNote = topSec.slug + ' concentra ' + this.n(topSec.vulnerabilities.secretsActive) + ' de los ' + this.n(F.totals.secretsActive) + ' secretos del portfolio — casi con certeza entropía de bundles vendorizados, que es lo que resuelve el triage de fixsecrets.';
+
+    const cx = R.filter(r => r.complexity > 0).sort((a,b)=>b.complexity-a.complexity).slice(0,9);
+    const lmax = Math.log10(cx[0].complexity);
+    v.complexBars = cx.map(r => ({ name:r.slug, val:this.n(r.complexity), w: Math.max(3, Math.log10(r.complexity)/lmax*100) + '%' }));
+    v.complexNote = 'outlier: ' + cx[0].slug + ' con ' + this.n(cx[0].complexity) + ' · mediana 0';
+
+    v.q = S.q;
+    v.onSearch = e => this.setState({ q: e.target.value });
+    const opt = (arr, l) => [{ v:'todos', l }].concat(arr.map(x => ({ v:x, l:String(x) })));
+    v.filters = [
+      { value:S.fType, options:opt(Object.keys(F.distributions.byType),'Tipo: todos'), onChange: e => this.setState({ fType: e.target.value }) },
+      { value:S.fSize, options:opt(['S','M','L'],'Tamaño: todos'), onChange: e => this.setState({ fSize: e.target.value }) },
+      { value:S.fLang, options:opt(langs.map(l=>l[0]),'Lenguaje: todos'), onChange: e => this.setState({ fLang: e.target.value }) },
+      { value:S.fStage, options:opt(Object.keys(F.distributions.byStage),'Estado: todos'), onChange: e => this.setState({ fStage: e.target.value }) }
+    ];
+
+    const colDefs = [
+      ['slug','Repositorio','left'],['type','Tipo','left'],['stack','Stack','left'],['linesOfCode','LOC','right'],
+      ['dv','Deps','right'],['cv','Código','right'],['sv','Secretos','right'],['potential','Residual','right'],
+      ['eta','Est. fix','right'],['prog','Progreso','center']
+    ];
+    v.cols = colDefs.map(c => ({
+      label: c[1], align: c[2], tour: c[0], arrow: S.sortK === c[0] ? (S.sortD > 0 ? '↑' : '↓') : '',
+      sort: () => this.setState(st => ({ sortK: c[0], sortD: st.sortK === c[0] ? -st.sortD : (c[2] === 'left' ? 1 : -1) }))
+    }));
+
+    const key = (r,k) => ({
+      dv: r.vulnerabilities.dependencies, cv: r.vulnerabilities.code, sv: r.vulnerabilities.secretsActive,
+      eta: r.estimate.total.seconds - (r.reviewSeconds||0), prog: this.progress(r.demoState.phases)
+    })[k] !== undefined ? ({
+      dv: r.vulnerabilities.dependencies, cv: r.vulnerabilities.code, sv: r.vulnerabilities.secretsActive,
+      eta: r.estimate.total.seconds - (r.reviewSeconds||0), prog: this.progress(r.demoState.phases)
+    })[k] : r[k];
+
+    const q = S.q.toLowerCase();
+    let rows = R.filter(r => (!q || r.slug.toLowerCase().indexOf(q) >= 0)
+      && (S.fType === 'todos' || r.type === S.fType)
+      && (S.fSize === 'todos' || r.size === S.fSize)
+      && (S.fLang === 'todos' || r.language === S.fLang)
+      && (S.fStage === 'todos' || r.demoState.stage === S.fStage));
+    rows = rows.slice().sort((a,b) => {
+      const x = key(a, S.sortK), y = key(b, S.sortK);
+      return typeof x === 'string' ? x.localeCompare(y)*S.sortD : (x-y)*S.sortD;
+    });
+    const mx = f => Math.max.apply(null, R.map(f)) || 1;
+    const mD = mx(r=>r.vulnerabilities.dependencies), mC = mx(r=>r.vulnerabilities.code), mSlog = Math.log10(mx(r=>r.vulnerabilities.secretsActive) + 1);
+    v.rowsLabel = rows.length + ' de ' + R.length + ' repositorios';
+    v.rows = rows.map(r => ({
+      tour: 'row-' + r.slug, tourPot: 'pot-' + r.slug, tourRing: 'ring-' + r.slug,
+      slug: r.slug, type: r.type, stack: r.stack, size: r.size, loc: this.n(r.linesOfCode),
+      typeBg: this.typeBg(r.type), typeFg: this.typeFg(r.type),
+      dv: this.n(r.vulnerabilities.dependencies), cv: this.n(r.vulnerabilities.code), sv: this.n(r.vulnerabilities.secretsActive),
+      dvw: (r.vulnerabilities.dependencies/mD*42+2) + 'px',
+      cvw: (r.vulnerabilities.code/mC*42+2) + 'px',
+      svw: (Math.log10(r.vulnerabilities.secretsActive + 1)/mSlog*42+2) + 'px',
+      pot: r.potential ? this.n(r.potential) : '—',
+      potColor: r.potential ? 'var(--bordo)' : 'var(--fg3)',
+      eta: this.t(r.estimate.total.seconds - (r.reviewSeconds||0)),
+      ring: this.ring(r.demoState.phases, false), ringLive: this.ring(r.demoState.phases, true),
+      pct: Math.round(this.progress(r.demoState.phases)*100),
+      ringTitle: r.demoState.stage + ' — ' + r.demoState.phases.map(p => p.phase + ': ' + p.status).join(' · '),
+      open: () => { location.hash = '#/repo/' + r.slug; window.scrollTo(0,0); },
+      key: e => { if (e.key === 'Enter') { location.hash = '#/repo/' + r.slug; window.scrollTo(0,0); } }
+    }));
+
+    // ---------- repo ----------
+    if (isRepo) {
+      const row = R.filter(r => r.slug === slug)[0], d = D.repositories[slug];
+      const it = this.itemsFor(slug), sel = this.selFor(slug), est = this.estimate(slug);
+      v.rSlug = slug;
+      v.rStack = row.stack + ' — ' + this.n(row.linesOfCode) + ' LOC · ' + this.n(d.sbom ? d.sbom.componentCount : 0) + ' componentes en el SBOM';
+      v.rFacts = [
+        { k:'Compilación', v: row.compiles ? 'OK · ' + String(row.compileTimeSeconds).replace('.',',') + ' s' : 'falla', color: row.compiles ? 'var(--teal)' : 'var(--bordo)' },
+        { k:'Tests', v: row.testCases ? this.n(row.testCases) + ' casos' + (row.testBaselineFailing ? ' · ' + row.testBaselineFailing + ' ya fallaban' : ' · baseline verde') : 'sin tests', color:'var(--fg)' },
+        { k:'Review', v: row.reviewSeconds ? this.t(row.reviewSeconds) : 'sin hallazgos', color:'var(--fg)' },
+        { k:'Estado', v: row.demoState.stage, color:'var(--fg)' }
+      ];
+      v.rType = row.type === 'N/A' ? 'N/A' : row.type;
+      v.typeHexBg = this.typeBg(row.type); v.typeHexFg = this.typeFg(row.type);
+      const blocking = (d.classification.blocking || []);
+      v.typeHeadline = row.type === 'B' ? 'Bloqueado por arquitectura' : (row.type === 'A' ? 'Remediable automáticamente' : 'Sin vulnerabilidades');
+      v.typeRationale = blocking.length ? 'Bloqueado por: ' + blocking.map(b => (typeof b === 'string' ? b : (b.packageName || b.package || b.name || ''))).filter(Boolean).join(', ') + '. El nivel 4 del plan no se aplica solo.' : (d.classification.rationale || '');
+      v.rSize = row.size;
+      v.rLoc = this.n(row.linesOfCode);
+      v.rSizeNote = row.size === 'L' ? '> 300k' : (row.size === 'M' ? '150k–300k' : '< 150k');
+      const cmax = mx(r => r.complexity) || 1;
+      v.sizeBars = [
+        { k:'Complejidad', v:this.n(row.complexity), w: Math.max(1, row.complexity/cmax*100) + '%' },
+        { k:'Cognitiva', v:this.n(row.cognitiveComplexity), w: Math.max(1, row.cognitiveComplexity/(mx(r=>r.cognitiveComplexity)||1)*100) + '%' },
+        { k:'Duplicación', v:String(row.duplicatedLinesDensity).replace('.',',') + '%', w: Math.min(100, row.duplicatedLinesDensity) + '%' }
+      ];
+      const totalVulns = row.vulnerabilities.dependencies + row.vulnerabilities.code + row.vulnerabilities.secretsActive;
+      const fixable = totalVulns - row.potential;
+      const clean = totalVulns === 0;
+      v.potTotal = this.n(totalVulns); v.potFixable = clean ? '—' : this.n(fixable);
+      v.potPct = clean ? '—' : (fixable/totalVulns > 0.995 && fixable < totalVulns ? '99,9%' : Math.round(fixable/totalVulns*100) + '%');
+      v.potRing = this.donut(clean ? 100 : fixable/totalVulns*100, clean ? 'var(--line)' : 'var(--teal)');
+      v.potNote = clean ? 'El review no encontró vulnerabilidades: no hay nada para remediar en este repositorio.'
+        : 'Código y secretos se corrigen al 100%. De las ' + this.n(row.vulnerabilities.dependencies) + ' de dependencias, ' + this.n(row.potential) + ' quedan sin fix disponible tras el nivel 3.';
+
+      const pts = R.filter(r => r.complexity > 0);
+      const lx = r => Math.log10(r.linesOfCode), ly = r => Math.log10(r.complexity);
+      const x0 = Math.min.apply(null, pts.map(lx)), x1 = Math.max.apply(null, pts.map(lx));
+      const y0 = Math.min.apply(null, pts.map(ly)), y1 = Math.max.apply(null, pts.map(ly));
+      const px = r => (6 + (lx(r)-x0)/((x1-x0)||1)*86) + '%', py = r => (8 + (ly(r)-y0)/((y1-y0)||1)*82) + '%';
+      v.scatter = pts.map(r => ({
+        title: r.slug + ' · ' + this.n(r.linesOfCode) + ' LOC · complejidad ' + this.n(r.complexity),
+        x: px(r), y: py(r), s: r.slug === slug ? '18px' : '11px', c: r.slug === slug ? 'var(--red)' : 'var(--gray)'
+      }));
+      const mePt = pts.filter(r => r.slug === slug)[0];
+      v.meLabel = mePt ? slug : '';
+      v.meLabelX = mePt ? 'calc(' + px(mePt) + ' + 14px)' : '-999px';
+      v.meLabelY = mePt ? 'calc(' + py(mePt) + ' - 7px)' : '0';
+      v.scatterNote = mePt ? 'Solo los ' + pts.length + ' repos con complejidad reportada. Eje vertical hasta ' + this.n(cx[0].complexity) + ' (' + cx[0].slug + ').'
+        : slug + ' no reporta complejidad; se muestra el portfolio como referencia.';
+
+      const plan = d.dependencies.plan;
+      const maxLevel = Math.max.apply(null, plan.levels.map(l => l.vulnerabilitiesFixed).concat([plan.residualTotal || 0, 1]));
+      v.planNote = this.n(d.dependencies.total) + ' vulns · se corrigen ' + this.n(d.dependencies.total - (plan.potentialAfterLevel3 || 0));
+      v.levelBars = plan.levels.map(l => ({
+        name: 'Nivel ' + l.level,
+        meta: (l.dependenciesUpdated || 0) + ' librerías' + (l.applied === false ? ' · no se aplica' : ''),
+        val: this.n(l.vulnerabilitiesFixed), w: Math.max(0, l.vulnerabilitiesFixed/maxLevel*100) + '%',
+        color: l.applied === false ? 'var(--amber)' : 'var(--teal)'
+      })).concat([{ name:'Residual', meta:(plan.residualByPackage||[]).length + ' paquetes sin fix', val:this.n(plan.residualTotal||0), w: Math.max(0,(plan.residualTotal||0)/maxLevel*100)+'%', color:'var(--bordo)' }]);
+
+      v.tabs = [['deps','Dependencias'],['code','Código (SAST)'],['secrets','Secretos']].map(t => ({
+        label: t[1], color: S.tab === t[0] ? 'var(--fg)' : 'var(--fg3)', bc: S.tab === t[0] ? 'var(--red)' : 'transparent',
+        go: () => this.setState({ tab: t[0] })
+      }));
+
+      const pool = S.tab === 'deps' ? it.deps.concat(it.l4) : (S.tab === 'code' ? it.code : it.secrets);
+      const allIds = pool.map(x => x.id);
+      v.selLabel = allIds.filter(i => sel[i]).length + ' de ' + pool.length + ' seleccionadas';
+      const b = [
+        { label:'Seleccionar todo', act: () => this.setSel(slug, allIds, true) },
+        { label:'Deseleccionar todo', act: () => this.setSel(slug, allIds, false) }
+      ];
+      if (S.tab === 'deps') {
+        b.push({ label:'Solo Critical + High', act: () => this.only(slug, allIds, pool.filter(x => x.severity === 'CRITICAL' || x.severity === 'HIGH').map(x=>x.id)) });
+        b.push({ label:'Sin cambio de código', act: () => this.only(slug, allIds, it.deps.filter(x => !x.requiresCodeChange).map(x=>x.id)) });
+        b.push({ label:'Excluir nivel 4', act: () => this.setSel(slug, it.l4.map(x=>x.id), false) });
+      } else if (S.tab === 'code') {
+        Object.keys(d.sast.byRule || {}).slice(0,4).forEach(rule => b.push({ label: rule.split('.').pop(), act: () => this.only(slug, allIds, it.code.filter(x => x.rule === rule).map(x=>x.id)) }));
+        ['CRITICAL','HIGH'].forEach(sv => { if ((d.sast.severityCounts||{})[sv]) b.push({ label:'Solo ' + this.sevLabel(sv), act: () => this.only(slug, allIds, it.code.filter(x => x.sev === sv).map(x=>x.id)) }); });
+      } else {
+        b.push({ label:'Solo activos', act: () => this.only(slug, allIds, it.secrets.filter(x => !x.fp).map(x=>x.id)) });
+        b.push({ label:'Solo verificados', act: () => this.only(slug, allIds, it.secrets.filter(x => x.verified).map(x=>x.id)) });
+        b.push({ label:'Excluir falsos positivos', act: () => this.setSel(slug, it.secrets.filter(x => x.fp).map(x=>x.id), false) });
+      }
+      v.bulk = b;
+
+      const mkGroup = (gkey, title, meta, list, mapper, truncNote) => {
+        const tourKey = 'grupo-' + gkey.replace(/[^a-zA-Z0-9]+/g,'-');
+        const ids = list.map(i => i.id);
+        const on = ids.filter(i => sel[i]).length;
+        const openKey = slug + '|' + gkey;
+        const isOpen = S.open[openKey] !== undefined ? S.open[openKey] : list.length > 0 && list.length <= 40;
+        return {
+          tour: tourKey, title, meta, open: isOpen, chev: isOpen ? '▼' : '▶',
+          count: list.length + (ids.length ? ' · ' + on + ' sel.' : ''),
+          boxBg: ids.length && on === ids.length ? 'var(--red)' : 'transparent',
+          boxBd: ids.length && on ? 'var(--red)' : 'var(--fg3)',
+          boxMark: !ids.length ? '' : (on === ids.length ? '✓' : (on ? '–' : '')),
+          toggleAll: () => this.setSel(slug, ids, !(ids.length && on === ids.length)),
+          toggleOpen: () => this.setState(st => ({ open: Object.assign({}, st.open, { [openKey]: !isOpen }) })),
+          rows: list.map(mapper), truncated: !!truncNote, truncNote: truncNote || ''
+        };
+      };
+
+      const depRow = u => {
+        const target = u.targetPackage || u.targetVersion || 'cambio de fuente';
+        return {
+          name: u.package, nameFull: u.package + ' (' + (u.ecosystem||'') + ')',
+          target: (u.currentVersion || '—') + ' → ' + target, targetFull: (u.currentVersion || '—') + ' → ' + target,
+          sev: this.sevLabel(u.severity), sevBg: this.sevBg(u.severity), sevFg: this.sevFg(u.severity),
+          kind: u.dependencyType === 'direct' ? 'directa' : 'transitiva', scope: u.applied === false ? 'nivel 4' : ('nivel ' + u.level),
+          info: (u.fixesCount || 0) + ' CVEs' + (u.fixedVulnerabilityIdsTruncated ? ' (lista recortada)' : ''),
+          infoFull: (u.fixedVulnerabilityIds || []).join(', ') + (u.fixedVulnerabilityIdsTruncated ? ' … de ' + u.fixesCount : ''),
+          flag: u.applied === false ? 'requiere migración' : (u.requiresCodeChange ? 'cambio de código' : 'bump simple'),
+          flagColor: u.applied === false ? 'var(--amber)' : (u.requiresCodeChange ? 'var(--red)' : 'var(--fg3)'),
+          checked: !!sel[u.id], disabled: false, op:'1', strike:'none',
+          aria: 'Seleccionar ' + u.package, toggle: () => this.setSel(slug, [u.id], !sel[u.id])
+        };
+      };
+
+      if (S.tab === 'deps') {
+        const groups = plan.levels.map(l => {
+          const list = (l.applied === false ? it.l4 : it.deps).filter(x => x.level === l.level);
+          return mkGroup('n' + l.level, l.title, (l.vulnerabilitiesFixed || 0) + ' vulns · quedan ' + (l.vulnerabilitiesRemaining || 0), list, depRow);
+        });
+        const res = (plan.residualByPackage || []).map((p,i) => ({
+          name: p.package, nameFull: p.package + ' (' + p.ecosystem + ')',
+          target: (p.installedVersion || '—') + ' → sin fix disponible', targetFull: 'no hay versión con fix publicada',
+          sev: this.sevLabel(p.severity), sevBg: this.sevBg(p.severity), sevFg: this.sevFg(p.severity),
+          kind: p.dependencyType === 'direct' ? 'directa' : 'transitiva', scope: 'residual',
+          info: p.count + ' vulns' + (p.vulnerabilityIdsTruncated ? ' (lista recortada)' : ''),
+          infoFull: (p.vulnerabilityIds || []).join(', ') + (p.vulnerabilityIdsTruncated ? ' … de ' + p.count : ''),
+          flag: 'sin fix', flagColor: 'var(--bordo)',
+          checked: false, disabled: true, op: '0.55', strike: 'none', aria: p.package + ' sin fix disponible', toggle: () => {}
+        }));
+        groups.push(Object.assign(mkGroup('res', 'Residual — sin fix disponible', this.n(plan.residualTotal||0) + ' vulns · no seleccionable', [], () => ({})), {
+          rows: res, count: res.length, boxMark: '', boxBg: 'transparent', boxBd: 'var(--fg3)', toggleAll: () => {}
+        }));
+        v.groups = groups;
+      } else if (S.tab === 'code') {
+        v.groups = (d.sast.files || []).map((f,fi) => mkGroup('f:' + fi, f.file.split('/').pop(), f.file, it.code.filter(x => x.fi === fi), x => ({
+          name: 'línea ' + x.line, nameFull: x.file + ':' + x.line,
+          target: x.rule, targetFull: x.rule,
+          sev: this.sevLabel(x.sev), sevBg: this.sevBg(x.sev), sevFg: this.sevFg(x.sev),
+          kind: 'SAST', scope: 'archivo', info: x.message, infoFull: x.message,
+          flag: '', flagColor: 'var(--fg3)', checked: !!sel[x.id], disabled: false, op:'1', strike:'none',
+          aria: 'Seleccionar hallazgo ' + x.file + ' línea ' + x.line, toggle: () => this.setSel(slug, [x.id], !sel[x.id])
+        }), f.total > (f.findings||[]).length ? 'se muestran ' + (f.findings||[]).length + ' de ' + f.total + ' hallazgos de este archivo' : ''));
+        if (est.codeHidden > 0) v.groups.push({ title:'Unidades no listadas', meta:'incluidas en la estimación', open:true, chev:'▼', count:'', boxMark:'', boxBg:'transparent', boxBd:'var(--fg3)', toggleAll:()=>{}, toggleOpen:()=>{}, rows:[], truncated:true, truncNote: this.n(est.codeHidden) + ' de ' + this.n(row.unitDetail.sastFiles) + ' unidades (archivo × severidad) no aparecen en el detalle, pero cuentan en la estimación (total real: ' + this.n(d.sast.total) + ' hallazgos).' });
+      } else {
+        v.groups = (d.secrets.files || []).map((f,fi) => mkGroup('k:' + fi, f.file.split('/').pop(), f.file, it.secrets.filter(x => x.fi === fi), x => ({
+          name: 'línea ' + x.line, nameFull: x.file + ':' + x.line,
+          target: x.tipo, targetFull: x.tipo,
+          sev: x.fp ? 'falso pos.' : 'activo', sevBg: x.fp ? 'var(--line)' : 'var(--amber)', sevFg: 'var(--fg)',
+          kind: '', scope: x.verified ? 'verificado' : 'no verificado', info: x.file, infoFull: x.file,
+          flag: '', flagColor:'var(--fg3)', checked: !!sel[x.id], disabled: false,
+          op: x.fp ? '0.5' : '1', strike: x.fp ? 'line-through' : 'none',
+          aria: 'Seleccionar secreto en ' + x.file, toggle: () => this.setSel(slug, [x.id], !sel[x.id])
+        }), f.total > (f.findings||[]).length ? 'se muestran ' + (f.findings||[]).length + ' de ' + this.n(f.total) + ' secretos de este archivo' : ''));
+        if (est.secHiddenFiles > 0) v.groups.push({ title:'Archivos no listados', meta:'incluidos en la estimación', open:true, chev:'▼', count:'', boxMark:'', boxBg:'transparent', boxBd:'var(--fg3)', toggleAll:()=>{}, toggleOpen:()=>{}, rows:[], truncated:true, truncNote: this.n(est.secHiddenFiles) + ' de ' + this.n(row.unitDetail.secretFiles) + ' archivos con secretos activos no aparecen en el detalle, pero cuentan en la estimación (total real: ' + this.n(d.secrets.active) + ' secretos activos).' });
+      }
+
+      const maxT = Math.max.apply(null, est.ph.map(p=>p.t)) || 1;
+      v.estPhases = est.ph.map(p => ({ name:p.name, units:p.units, time: p.t ? this.t(p.t) : '—', cost:this.usd(p.c), w:(p.t/maxT*100)+'%' }));
+      v.hasL4 = it.l4.length > 0;
+      v.l4Label = est.l4.n + ' de ' + it.l4.length + ' seleccionadas · ' + this.t(est.l4.t) + ' · ' + this.usd(est.l4.c);
+      v.estTotalTime = this.t(est.total);
+      v.estTotalCost = this.usd(est.cost);
+      v.estFixed = clean ? '—' : this.n(est.fixes) + ' de ' + this.n(totalVulns);
+      v.estOpen = this.n(totalVulns - est.fixes);
+      v.estFixedW = (est.fixes/(totalVulns||1)*100) + '%';
+      v.estNote = 'Residual sin fix: ' + this.n(row.potential) + ' de dependencias.' + (it.l4.length ? ' El nivel 4 se cuenta aparte.' : '')
+        + (est.codeHidden > 0 ? ' Incluye ' + this.n(est.codeHidden) + ' unidades de código que no aparecen en el detalle.' : '')
+        + (est.secHiddenFiles > 0 ? ' Incluye ' + this.n(est.secHiddenFiles) + ' archivos con secretos que no aparecen en el detalle.' : '');
+      v.compileNote = String(row.compileTimeSeconds).replace('.',',') + ' s';
+
+      const stateOf = k => this.phaseStatus(slug, k);
+      const anyRunning = ['fixdeps','fixcode','fixsecrets'].some(k => S.phRun[slug + ':' + k]);
+      let accT = 0, accC = 0, open = totalVulns;
+      v.phaseCards = ['fixdeps','fixcode','fixsecrets'].map((k, idx) => {
+        const rk = slug + ':' + k, st = stateOf(k);
+        const live = est.ph[idx+1];
+        const ph = (S.phRun[rk] || S.phDone[rk]) && S.phRes[rk] ? S.phRes[rk] : { units: live.units, t: live.t, c: live.c, fixes: live.fixes };
+        const done = st === 'done', running = st === 'running';
+        const pct = done ? 100 : (S.phPct[rk] || (running ? 45 : 0));
+        if (done) { accT += ph.t; accC += ph.c; open -= ph.fixes; }
+        const na = st === 'not-applicable' || !live.t && !ph.t;
+        const blocker = this.blockedBy(slug, k);
+        return {
+          key: k, units: na ? 'sin unidades en este repo' : ph.units,
+          fixes: na ? '—' : this.n(ph.fixes), time: na ? '—' : this.t(ph.t), cost: na ? '—' : this.usd(ph.c),
+          pct: na ? '—' : pct + '%', ring: this.donut(na ? 0 : pct, done ? 'var(--teal)' : 'var(--red)'),
+          stateLabel: na ? 'no aplica' : (done ? 'completado' : (running ? 'en curso' : (blocker ? 'en espera de ' + blocker : 'pendiente'))),
+          stateColor: na ? 'var(--fg3)' : this.phColor(st),
+          barW: (na ? 0 : pct) + '%', msg: S.phMsg[rk] || '',
+          btnLabel: na ? 'Sin trabajo pendiente' : (done ? 'Ejecutada' : (running ? 'Ejecutando… ' + pct + '%' : (blocker ? 'Requiere ' + blocker : 'Ejecutar ' + k))),
+          btnBg: (na || done || blocker) ? 'var(--line2)' : 'var(--red)', btnFg: (na || done || blocker) ? 'var(--fg3)' : '#fff',
+          disabled: na || done || running || !!blocker || anyRunning, run: () => this.startPhase(slug, k)
+        };
+      });
+      v.phasesNote = row.reviewSeconds ? 'review ejecutada en ' + this.t(row.reviewSeconds) + ' · las tres fases siguientes se ejecutan por separado' : 'el review no encontró vulnerabilidades: no hay fases de fix para ejecutar';
+      const allDone = ['fixdeps','fixcode','fixsecrets'].every(k => { const st = stateOf(k); return st === 'done' || st === 'not-applicable'; });
+      v.running = ['fixdeps','fixcode','fixsecrets'].some(k => S.phRun[slug + ':' + k]);
+      v.runLabel = allDone ? 'Remediación completa' : (v.running ? 'Ejecutando en secuencia…' : 'Ejecutar las 3 fases en secuencia');
+      v.runAll = () => {
+        const first = ['fixdeps','fixcode','fixsecrets'].filter(k => this.phaseStatus(slug, k) === 'pending')[0];
+        if (first) this.startPhase(slug, first, true);
+      };
+      v.afterStats = [
+        { k:'Estado después de la remediación', v: clean ? 'nada para remediar' : (allDone ? 'PR abierto · pendiente de QA' : 'en curso'), color: allDone && !clean ? 'var(--teal)' : 'var(--fg3)' },
+        { k:'Vulnerabilidades abiertas', v: clean ? '0' : this.n(open) + ' de ' + this.n(totalVulns), color:'var(--fg)' },
+        { k:'Fix ejecutado (estimado)', v: accT ? this.t(accT) : '—', color:'var(--fg)' },
+        { k:'Costo ejecutado (estimado)', v: accT ? this.usd(accC) : '—', color:'var(--fg)' }
+      ];
+    }
+
+    // ---------- remediados ----------
+    if (isRem) {
+      const list = R.filter(r => r.demoState.stage === 'remediated');
+      const qa = S.qa;
+      let fixedTot = 0, tTot = 0, cTot = 0;
+      v.remRepos = list.map(r => {
+        const fixed = r.vulnerabilities.dependencies - r.potential;
+        fixedTot += fixed; tTot += r.estimate.total.seconds; cTot += r.estimate.total.usd;
+        const flows = this.flowsFor(r.slug);
+        const done = flows.filter(f => qa[f.fid]).length;
+        return {
+          slug: r.slug, href: '#/repo/' + r.slug, tourFlows: 'flows-' + r.slug, type:'TIPO ' + r.type, stack: r.stack,
+          typeBg: this.typeBg(r.type), typeFg: this.typeFg(r.type),
+          depFixed: this.n(fixed), depTotal: this.n(r.vulnerabilities.dependencies),
+          depW: (r.vulnerabilities.dependencies ? fixed/r.vulnerabilities.dependencies*100 : 100) + '%',
+          depRest: r.potential ? this.n(r.potential) + ' residuales sin fix disponible' : 'sin residuales',
+          depRestColor: r.potential ? 'var(--bordo)' : 'var(--fg3)',
+          code: this.n(r.vulnerabilities.code), secrets: this.n(r.vulnerabilities.secretsActive),
+          units: this.n(r.units.fixdeps + r.units.fixcode + r.units.fixsecrets),
+          phases: ['fixdeps','fixcode','fixsecrets'].map(k => ({ name:k, time: this.t(r.estimate[k].seconds), cost: this.usd(r.estimate[k].usd) })),
+          totalTime: this.t(r.estimate.total.seconds), totalCost: this.usd(r.estimate.total.usd),
+          prLabel: 'PR #' + (1200 + (this.hash(r.slug) % 700)),
+          prMeta: this.n(r.units.fixdeps + r.units.fixcode) + ' commits · ' + this.n(r.unitDetail.sastFiles + r.unitDetail.secretFiles) + ' archivos tocados',
+          prBranch: 'remediation/' + r.slug,
+          qaState: done === 0 ? 'pendiente de QA' : (done === flows.length ? 'verificado' : 'verificación parcial'),
+          qaBg: done === 0 ? 'var(--line)' : (done === flows.length ? 'var(--teal)' : 'var(--amber)'),
+          qaFg: done === flows.length && done > 0 ? '#fff' : 'var(--fg)',
+          qaCount: done + ' de ' + flows.length + ' flujos verificados',
+          qaW: (flows.length ? done/flows.length*100 : 0) + '%',
+          flows: flows.map(f => {
+            const rec = qa[f.fid];
+            return {
+              name: f.name, nameFull: f.name, kind: f.kind, detail: f.detail, detailFull: f.detail,
+              checked: !!rec, aria: 'Verificado por QA: ' + f.name,
+              stamp: rec ? (rec.by + ' · ' + rec.at) : 'sin verificar',
+              toggle: () => {
+                const next = Object.assign({}, this.state.qa);
+                if (next[f.fid]) delete next[f.fid];
+                else next[f.fid] = { by: this.props.qaResponsable || 'QA · m.rodriguez', at: new Date().toLocaleString('es-AR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) };
+                this.saveQa(next);
+              }
+            };
+          })
+        };
+      });
+      v.remSummary = list.length + ' repos · ' + this.n(fixedTot) + ' vulnerabilidades de dependencias corregidas · ' + this.t(tTot) + ' y ' + this.usd(cTot) + ' estimados';
+    }
+    return v;
+  }
+}
+</script>
+</body>
+</html>

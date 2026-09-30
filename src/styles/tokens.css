@@ -1,0 +1,110 @@
+@import './redbee-ds.css';
+
+/* Alias de la UI sobre los tokens del DS (handoff §«Tokens de diseño»). */
+:root {
+  --bg: var(--rb-white);
+  --bg2: var(--rb-tiza);
+  --card: var(--rb-white);
+  --line: var(--rb-gray-mid);
+  --line2: var(--rb-tiza);
+  --fg: var(--rb-black);
+  --fg2: var(--rb-dark);
+  --fg3: var(--rb-text-muted);
+  --red: var(--rb-red);
+  --bordo: var(--rb-bordo);
+  --teal: var(--rb-teal);
+  --amber: var(--rb-yellow);
+  --gray: #b9b9b4;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font: 'DM Sans Variable', 'DM Sans', system-ui, sans-serif;
+  --font-sans: var(--font);
+}
+
+/* Paleta oscura propia de la UI: el DS sólo define fondos claros. */
+:root[data-theme='dark'] {
+  --bg: #020202;
+  --bg2: #0e0e0e;
+  --card: #0b0b0b;
+  --line: #2a2a28;
+  --line2: #171716;
+  --fg: #ffffff;
+  --fg2: #e4e4e0;
+  --fg3: #9a9a94;
+  --gray: #4a4a47;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: var(--font);
+  color: var(--fg);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--red);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--bordo);
+  text-decoration: underline;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+input[type='checkbox'] {
+  accent-color: #ff0001;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  margin: 0;
+}
+
+input[type='checkbox']:disabled {
+  cursor: default;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+/* Foco visible del DS: 2px teal con 2px de offset. */
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 999px;
+}
+
+@keyframes rbpulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}

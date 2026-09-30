@@ -1,0 +1,15 @@
+.hex {
+  width: 96px;
+  height: 110px;
+  flex: none;
+  clip-path: var(--hex-clip);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hex span {
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1;
+}

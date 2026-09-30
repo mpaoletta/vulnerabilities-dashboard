@@ -1,0 +1,447 @@
+/* ============================================================
+   redbee — Design System
+   Color & Type tokens
+   Source of truth: Manual de marca redbee 2025 + Guía de templates
+   ============================================================ */
+
+/* DM Sans — variable, brand-supplied
+   Local TTFs cover the full opsz/wght axes and italics. */
+@font-face {
+  font-family: 'DM Sans';
+  src: url('fonts/DMSans-VariableFont_opsz_wght.ttf') format('truetype-variations'),
+       url('fonts/DMSans-VariableFont_opsz_wght.ttf') format('truetype');
+  font-weight: 100 1000;
+  font-stretch: 25% 151%;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DM Sans';
+  src: url('fonts/DMSans-Italic-VariableFont_opsz_wght.ttf') format('truetype-variations'),
+       url('fonts/DMSans-Italic-VariableFont_opsz_wght.ttf') format('truetype');
+  font-weight: 100 1000;
+  font-stretch: 25% 151%;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  /* ─── COLOR · BRAND ─────────────────────────────────────────
+     Rojo principal is THE dominant brand color.
+     Turquesa & yellow are ACCENT ONLY (never as fill backgrounds).
+  */
+  --rb-red:           #FF0001;   /* Rojo principal — color dominante */
+  --rb-red-dark:      #D41717;   /* Rojo oscuro — variante */
+  --rb-bordo:         #9F0000;   /* Bordó — variante oscura para depth */
+  --rb-teal:          #01BCBA;   /* Turquesa — acento de énfasis */
+  --rb-yellow:        #FFBF00;   /* Amarillo — acento secundario */
+
+  /* ─── COLOR · NEUTRALS ──────────────────────────────────── */
+  --rb-black:         #020202;   /* Negro — fondo de presentaciones (uno de los 4 permitidos) */
+  --rb-near-black:    #020202;   /* alias */
+  --rb-text:          #020202;   /* Cuerpo de texto */
+  --rb-text-muted:    #666660;   /* Texto secundario / labels */
+  --rb-dark:          #373737;   /* Gris oscuro — fondo de slide de sección, títulos sobre tiza */
+  --rb-gray-mid:      #E0E0DE;   /* Bordes, separadores */
+  --rb-gray:          #4A4A47;   /* Gris medio — relleno de figuras geométricas */
+  --rb-gray-light:    #F5F5F3;   /* Card / row background (UI only) */
+  --rb-tiza:          #F1F1EF;   /* "Tiza" — fondo permitido en presentaciones */
+  --rb-white:         #FFFFFF;   /* Blanco — fondo permitido en presentaciones */
+
+  /* ─── COLOR · SEMANTIC ROLES ───────────────────────────────
+     Use these in components/slides instead of raw brand colors.
+  */
+  --fg-1:             var(--rb-black);        /* default text */
+  --fg-2:             var(--rb-text);         /* body text */
+  --fg-3:             var(--rb-text-muted);   /* secondary text */
+  --fg-on-red:        var(--rb-white);
+  --fg-on-dark:       var(--rb-white);
+  --fg-accent:        var(--rb-teal);         /* bajadas, números, → flecha */
+  --fg-emphasis:      var(--rb-red);          /* keyword bold, headers en tabla */
+
+  --bg-default:       var(--rb-white);     /* fondo permitido 1 */
+  --bg-secondary:     var(--rb-tiza);      /* fondo permitido 2 */
+  --bg-section:       var(--rb-black);     /* fondo permitido 3 — separador de sección */
+  --bg-portada:       var(--rb-red);       /* fondo permitido 4 — portada */
+  --bg-inverse:       var(--rb-black);
+
+  /* REGLA DE FONDOS EN PRESENTACIONES
+     Solo estos cuatro colores pueden ser fondo de un slide:
+       • var(--rb-red)    #FF0001  — portada / split rojo
+       • var(--rb-black)  #020202  — separador de sección
+       • var(--rb-white)  #FFFFFF  — contenido por defecto
+       • var(--rb-tiza)   #F1F1EF  — alternancia / superficie secundaria  */
+
+  --border-subtle:    var(--rb-gray-mid);
+  --border-strong:    var(--rb-black);
+  --rule-accent:      var(--rb-red);          /* línea corta bajo título */
+
+  /* ─── TIPOGRAFÍA ─────────────────────────────────────────────────
+     Fuente base: DM Sans. Spec: reference/redbee-typography-rules.pdf
+     Pesos disponibles (los SIETE):
+       ExtraLight · Light · Regular · Medium · SemiBold · Bold · Black
+     Variantes itálicas en uso: Italic, Bold Italic, Light Italic
+       (atribución de citas, captions, encabezados de roadmap) */
+  --font-sans: 'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --fw-extralight: 200;
+  --fw-light:      300;
+  --fw-regular:    400;
+  --fw-medium:     500;
+  --fw-semibold:   600;
+  --fw-bold:       700;
+  --fw-black:      800;
+
+  /* Type scale — derived from the DETAILED rule pages (§1–§11) of
+     reference/redbee-typography-rules.pdf, NOT the summary table.
+     pt → px for the 1280×720 canvas (native slide 720pt wide → ×1.778).
+     Each role lists: pt range (spec) · weight (spec).                */
+
+  /* §1 · PORTADAS */
+  --slide-portada:      112px;  /* Título de portada · 50–70pt · Bold/SemiBold/Medium */
+  --slide-portada-sub:   43px;  /* Subtítulo de portada · 16–40pt · Regular/Medium    */
+  --slide-url:           19px;  /* URL / marca portada · 10–11pt · Regular · MÁX 11pt  */
+
+  /* §2 · SEPARADORES DE SECCIÓN */
+  --slide-section-num:  580px;  /* Número decorativo de sección · 326pt · ExtraLight  */
+  --slide-section-name:  84px;  /* Título de sección · 47pt · Medium                  */
+
+  /* §3 · TITULARES DE CONTENIDO */
+  --slide-statement:     80px;  /* Statement fuerte · 35–55pt · Regular+Bold misma línea */
+  --slide-h1:            41px;  /* Titular de sección de contenido · 23pt · Bold+Regular */
+  --slide-question:      84px;  /* Titular grande / pregunta retórica · 38–54pt · Reg/Bold*/
+
+  /* §4 · SUBTÍTULOS Y ENCABEZADOS DE BLOQUE */
+  --slide-block-sub:     42px;  /* Subtítulo de bloque · 23–25pt · Bold+Medium misma línea*/
+  --slide-lead:          34px;  /* Subtítulo lead/intro TURQUESA · 18–20pt · SemiBold/Med */
+  --slide-label:         20px;  /* Label de sección ALL CAPS · 10–12pt · Bold UPPER      */
+
+  /* §5 · CIFRAS GRANDES Y MÉTRICAS */
+  --slide-kpi:          200px;  /* Cifra hero / KPI · 50–121pt · Light o Bold          */
+  --slide-kpi-2:         64px;  /* Cifra métrica secundaria/resultado · 24–43pt · Bold/Med*/
+  --slide-unit:          36px;  /* Unidad/complemento de cifra · 9–22pt · Med/Reg · proporcional */
+  --slide-table-figure:  39px;  /* Cifra en tabla de impacto · 20–22pt · Bold         */
+
+  /* §6 · TEXTO EN GRÁFICOS Y VISUALIZACIONES */
+  --slide-chart-value:   20px;  /* Porcentajes/valores sobre gráfico · 9–12pt · Med/SemiBold*/
+  --slide-chart-axis:    16px;  /* Labels de ejes/etiquetas de gráfico · 8–10pt · Reg/Med */
+  --slide-node:          21px;  /* Texto en nodos/diagramas de flujo · 10–13pt · Med/SemiBold*/
+
+  /* §7 · BODY / CUERPO DE TEXTO */
+  --slide-body:          23px;  /* Texto corrido principal · 9–13pt · Regular (Bold solo 1–2 conceptos)*/
+  /* §8 · LABELS Y ETIQUETAS DE COMPONENTES */
+  --slide-field-label:   21px;  /* Label de campo dentro de card · 10–12pt · Bold/SemiBold*/  --slide-tag:           16px;  /* Tag de categoría/industria · 9pt · Bold UPPER · separador · */
+  --slide-item-num:      36px;  /* Label de número de ítem/paso · 14–23pt · Bold      */
+
+  /* §9 · QUOTES Y CITAS */
+  --slide-quote:         88px;  /* Cita principal / frase de impacto · 38–55pt · Regular*/
+  --slide-quote-attr:    40px;  /* Atribución de cita · 22pt · Italic                 */
+
+  /* §10 · ROADMAP Y TIMELINES */
+  --slide-roadmap-head:  41px;  /* Encabezado de roadmap · 23pt · Bold Italic + Light Italic*/
+  --slide-period:        25px;  /* Label de período (Q1/Q2) · 14pt · Medium           */
+  --slide-roadmap-item:  18px;  /* Ítem de roadmap · 9–10pt · Bold (nombre)+Regular (desc)*/
+  --slide-roadmap-num:   12px;  /* Numeración de ítem en roadmap · 7pt · Bold         */
+
+  /* §11 · CAPTIONS Y PIES */
+  --slide-caption:       14px;  /* Caption / nota al pie · 7–8pt · Regular o Italic · NIVEL MÁS PEQUEÑO*/
+  --slide-copyright:     18px;  /* Copyright y contacto · 10pt · Regular              */
+
+  --slide-secondary:     18px;  /* Texto secundario · 9–11pt · Regular               */
+
+  /* Back-compat aliases */
+  --slide-display:  var(--slide-portada);
+  --slide-section:  var(--slide-section-num);
+  --slide-comp-sub: 36px;
+  --slide-h2:       var(--slide-comp-sub);
+  --slide-small:    var(--slide-secondary);
+
+  --ui-display: 48px;
+  --ui-h1:      32px;
+  --ui-h2:      24px;
+  --ui-h3:      20px;
+  --ui-body:    15px;
+  --ui-small:   13px;
+  --ui-label:   11px;
+
+  --lh-tight-tightest:  0.8;   /* display / números grandes */
+  --lh-tight:           0.9;   /* titulares — default */
+  --lh-snug:    1.2;
+  --lh-normal:  1.5;
+  --lh-loose:   1.7;
+
+  --tracking-tight: -0.02em;
+  --tracking-snug:  -0.01em;
+  --tracking-wide:   0.08em;   /* labels mayúscula */
+
+  /* ─── SPACING ─────────────────────────────────────────────
+     4px base. Slides use a 1280-wide canvas → ~64px gutter. */
+  --space-0:   0;
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* Slide canvas — 16:9 at design size */
+  --slide-w: 1280px;
+  --slide-h:  720px;
+  --slide-pad-x: 64px;
+  --slide-pad-y: 56px;
+
+  /* ─── RADII ───────────────────────────────────────────────
+     redbee uses only two radii:
+       --radius-sm (4px) = default; siempre un poco redondeado
+       --radius-pill     = solo para badges / chips / tags
+  */
+  --radius-sm:   4px;
+  --radius-pill: 999px;
+
+  /* ─── SHADOW ──────────────────────────────────────────────
+     redbee no utiliza sombras. Diseño completamente flat —
+     ni en slides, ni en UI. La jerarquía se construye con
+     color, espacio y peso tipográfico. */
+
+  /* ─── BRAND SHAPE TOKENS ──────────────────────────────────
+     The hexagon (pointy-top) is the brand's identity shape.
+     Use as bullet, container, decorative outline.
+  */
+  --hex-clip: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+
+  /* ─── BACKGROUND SHAPE TOKENS ─────────────────────────────
+     Figuras geométricas para fondos de slide. Se pueden rellenar
+     con el rojo de marca, negro o cualquier acento — la tipografía
+     encima siempre en contraste. NUNCA degradés. */
+  /* Panel diagonal — borde izquierdo en diagonal (para columna derecha) */
+  --clip-diagonal-right: polygon(22% 0, 100% 0, 100% 100%, 0 100%);
+  /* Panel diagonal — borde derecho en diagonal (para columna izquierda) */
+  --clip-diagonal-left:  polygon(0 0, 100% 0, 78% 100%, 0 100%);
+  /* Panel chevron — punta hacia la derecha a media altura (columna izquierda) */
+  --clip-chevron-right:  polygon(0 0, 86% 0, 100% 50%, 86% 100%, 0 100%);
+  /* Panel chevron — punta hacia la izquierda (columna derecha) */
+  --clip-chevron-left:   polygon(14% 0, 100% 0, 100% 100%, 14% 100%, 0 50%);
+  /* Hexágono flat-top — para panales de equipo (honeycomb) */
+  --hex-clip-flat: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+
+  /* ─── MOTION ──────────────────────────────────────────────
+     Subtle. Brand prefers calm, not bouncy. */
+  --ease-standard: cubic-bezier(.2, .0, .0, 1);
+  --ease-emphasis: cubic-bezier(.2, .8, .2, 1);
+  --t-fast:   120ms;
+  --t-normal: 200ms;
+  --t-slow:   320ms;
+}
+
+/* ─── SEMANTIC TEXT STYLES ─────────────────────────────────
+   Spec: reference/redbee-typography-rules.pdf
+   Use as class names: <h1 class="rb-h1">…</h1>            */
+html { font-family: var(--font-sans); color: var(--fg-1); }
+body { font-family: var(--font-sans); }
+
+/* Título de portada · 50–70pt · Bold (afirmaciones), SemiBold o Medium (neutro) */
+.rb-display {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-bold);
+  font-size: var(--slide-portada);
+  line-height: 0.9;
+  letter-spacing: var(--tracking-snug);
+}
+/* Número decorativo de sección · 326pt · ExtraLight · elemento gráfico */
+.rb-section-num {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-extralight);
+  font-size: var(--slide-section-num);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+}
+/* Título de sección · 47pt · Medium */
+.rb-section-name {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-medium);
+  font-size: var(--slide-section-name);
+  line-height: 0.95;
+  letter-spacing: var(--tracking-snug);
+}
+/* Statement principal de impacto · 35–55pt · Regular + Bold en la misma línea */
+.rb-statement {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: var(--slide-statement);
+  line-height: 0.95;
+  letter-spacing: var(--tracking-snug);
+}
+.rb-statement strong { font-weight: var(--fw-bold); }
+/* Cifra hero / KPI · 50–121pt · Light (volumen) o Bold (énfasis) */
+.rb-kpi {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-light);
+  font-size: var(--slide-kpi);
+  line-height: 0.8;
+  letter-spacing: -0.03em;
+}
+.rb-kpi.is-bold { font-weight: var(--fw-bold); }
+/* Quote de impacto · 38–55pt · Regular */
+.rb-quote {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: var(--slide-quote);
+  line-height: 1.05;
+  letter-spacing: var(--tracking-snug);
+}
+/* Atribución de cita · 22pt · Italic */
+.rb-quote-attr {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-style: italic;
+  font-size: var(--slide-quote-attr);
+  color: var(--fg-3);
+}
+/* Titular de slide de contenido · 23pt · Bold + Regular en la misma línea */
+.rb-h1 {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: var(--slide-h1);
+  line-height: 0.95;
+  letter-spacing: var(--tracking-snug);
+  color: var(--fg-1);
+}
+.rb-h1 strong { font-weight: var(--fw-bold); }
+/* Subtítulo de bloque · 23–25pt · Bold + Medium */
+.rb-block-sub {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-medium);
+  font-size: var(--slide-block-sub);
+  line-height: 1.1;
+}
+.rb-block-sub strong { font-weight: var(--fw-bold); }
+/* Subtítulo de componente · 20pt · Medium */
+.rb-h2 {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-medium);
+  font-size: var(--slide-comp-sub);
+  line-height: 1.1;
+  color: var(--fg-1);
+}
+/* Subtítulo lead / intro · 18–20pt · SemiBold o Medium · TURQUESA */
+.rb-lead {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-semibold);
+  font-size: var(--slide-lead);
+  line-height: var(--lh-snug);
+  color: var(--fg-accent);
+}
+/* Body principal · 12–13pt · Regular (Bold solo para 1–2 conceptos clave) */
+.rb-body {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: var(--slide-body);
+  line-height: var(--lh-normal);
+  color: var(--fg-2);
+}
+.rb-body strong { font-weight: var(--fw-bold); }
+/* Texto secundario · 9–11pt · Regular */
+.rb-small {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: var(--slide-secondary);
+  line-height: var(--lh-normal);
+  color: var(--fg-3);
+}
+/* Caption / pie · 7–8pt · Regular o Italic · nivel más pequeño permitido */
+.rb-caption {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: var(--slide-caption);
+  line-height: var(--lh-normal);
+  color: var(--fg-3);
+}
+.rb-caption.is-italic { font-style: italic; }
+/* Label de campo · 10–12pt · Bold o SemiBold */
+.rb-field-label {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-bold);
+  font-size: var(--slide-field-label);
+  color: var(--fg-1);
+}
+/* Label ALL CAPS de sección · 9–10pt · Bold · UPPERCASE */
+.rb-label {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-bold);
+  font-size: var(--slide-label);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+/* Tag de categoría · 9pt · Bold · UPPERCASE · separados por · */
+.rb-tag {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-bold);
+  font-size: var(--slide-tag);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+/* Copyright · 10pt · Regular */
+.rb-copyright {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: var(--slide-copyright);
+  color: var(--fg-3);
+}
+.rb-num {
+  /* big numbers (01., 02. …) — turquoise accent by default,
+     but any accent or brand red is valid (one color per list) */
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  color: var(--fg-accent);
+  letter-spacing: var(--tracking-snug);
+}
+.rb-keyword {
+  /* the word that gets emphasized inside a title — keep weight bold */
+  font-weight: var(--fw-bold);
+}
+
+/* The signature red rule that sits under a slide title */
+.rb-rule {
+  display: block;
+  width: 72px;
+  height: 2px;
+  background: var(--rule-accent);
+  margin-top: 12px;
+}
+
+/* The signature turquoise → arrow used in lists */
+.rb-arrow::before {
+  content: "→";
+  color: var(--fg-accent);
+  font-weight: var(--fw-bold);
+  margin-right: 10px;
+}
+
+/* The hexagon bullet (outline turquoise — uses layered clip-paths because
+   borders on clip-path elements get clipped too and look broken) */
+.rb-hex-bullet {
+  display: inline-block;
+  width: 18px;
+  height: 21px;
+  background: var(--fg-accent);
+  clip-path: var(--hex-clip);
+  position: relative;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+.rb-hex-bullet::after {
+  content: '';
+  position: absolute;
+  inset: 2.5px;
+  background: var(--bg-default);
+  clip-path: var(--hex-clip);
+}

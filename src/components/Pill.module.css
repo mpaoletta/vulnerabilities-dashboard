@@ -1,0 +1,21 @@
+.pill {
+  display: inline-block;
+  font-weight: 700;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.sm {
+  font-size: 10px;
+  padding: 2px 8px;
+}
+
+.md {
+  font-size: 10.5px;
+  padding: 2px 9px;
+}
+
+.qa {
+  font-size: 10.5px;
+  padding: 4px 11px;
+}

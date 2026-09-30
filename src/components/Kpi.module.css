@@ -1,0 +1,17 @@
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.value {
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+
+.note {
+  font-size: 12px;
+  color: var(--fg3);
+}

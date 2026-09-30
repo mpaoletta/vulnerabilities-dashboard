@@ -1,0 +1,36 @@
+.main {
+  padding: 22px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 1780px;
+  margin: 0 auto;
+}
+
+.mainWide {
+  gap: 16px;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.note {
+  font-size: 11px;
+  color: var(--fg3);
+}
+
+.track {
+  background: var(--line2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.track i {
+  display: block;
+  height: 100%;
+}

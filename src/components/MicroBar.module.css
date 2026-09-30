@@ -1,0 +1,16 @@
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.value {
+  font-weight: 600;
+}
+
+.bar {
+  display: block;
+  height: 6px;
+  border-radius: 999px;
+}

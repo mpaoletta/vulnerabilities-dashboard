@@ -1,0 +1,23 @@
+schema: spec-driven
+
+context: |
+  Tech stack: React 19 + TypeScript, Vite 8, oxlint. Hash routing. No backend yet:
+  data comes from the static demo dataset; a later change will model vulnerabilities-api
+  (FastAPI sibling repo). sbom-security-orchestrator (sibling CLI) produces the data.
+  Design source of truth: docs/design_handoff_remediacion_dashboard (hi-fi, redbee DS).
+  UI language: Spanish (rioplatense, voseo). Brand "redbee" always lowercase.
+
+rules:
+  proposal:
+    - Identify affected modules under src/
+    - Reference the design handoff section being implemented
+  specs:
+    - Use Given/When/Then format for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Keep data access behind a single module so the API swap is local
+    - Include test strategy
+  tasks:
+    - Group tasks by phase (infrastructure, implementation, testing)
+    - Use hierarchical numbering (1.1, 1.2, etc.)
+    - Keep tasks small enough to complete in one session

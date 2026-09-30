@@ -1,0 +1,208 @@
+.panel {
+  position: sticky;
+  top: 76px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+}
+
+.head {
+  padding: 13px 15px;
+  border-bottom: 1px solid var(--line);
+}
+
+.label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg3);
+}
+
+.phases {
+  padding: 13px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.phase {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.phaseTop {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.phaseName {
+  font-size: 12.5px;
+  font-weight: 700;
+  font-family: var(--mono);
+}
+
+.phaseTime {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.phaseBottom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.units {
+  font-size: 10.5px;
+  color: var(--fg3);
+  white-space: nowrap;
+}
+
+.track {
+  flex: 1;
+  height: 5px;
+  background: var(--line2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.track i {
+  display: block;
+  height: 100%;
+  background: var(--teal);
+}
+
+.cost {
+  font-size: 10.5px;
+  color: var(--fg3);
+  width: 62px;
+  text-align: right;
+}
+
+.l4 {
+  padding: 11px 15px;
+  border-top: 1px solid var(--line);
+  background: var(--bg2);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.l4Label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+.l4Value {
+  font-size: 12px;
+  color: var(--fg2);
+}
+
+.small {
+  font-size: 11px;
+  color: var(--fg3);
+}
+
+.totals {
+  padding: 13px 15px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--bg2);
+}
+
+.totalRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.totalTime {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.totalCost {
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.fixed {
+  padding: 13px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  border-top: 1px solid var(--line);
+}
+
+.kv {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  gap: 8px;
+}
+
+.kv span {
+  color: var(--fg3);
+}
+
+.fixedBar {
+  display: flex;
+  height: 10px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--line2);
+}
+
+.fixedBar i {
+  display: block;
+  background: var(--teal);
+}
+
+.run {
+  padding: 11px 15px;
+  border-top: 1px solid var(--line);
+}
+
+.runBtn {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 13px;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.runBtn:hover {
+  background: var(--bordo);
+}
+
+.disclaimer {
+  display: block;
+  margin-top: 9px;
+  font-size: 10.5px;
+  color: var(--fg3);
+  line-height: 1.45;
+}
+
+@media (max-width: 1099px) {
+  .panel {
+    position: static;
+  }
+}

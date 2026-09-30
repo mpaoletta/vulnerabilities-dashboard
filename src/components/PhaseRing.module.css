@@ -1,0 +1,32 @@
+.ring {
+  position: relative;
+  margin: 0 auto;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  -webkit-mask: radial-gradient(farthest-side, transparent 61%, #000 63%);
+  mask: radial-gradient(farthest-side, transparent 61%, #000 63%);
+}
+
+.live {
+  animation: rbpulse 1.3s ease-in-out infinite;
+}
+
+.pct {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9.5px;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live {
+    animation: none;
+  }
+}

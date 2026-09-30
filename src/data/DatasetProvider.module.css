@@ -1,0 +1,15 @@
+.state {
+  padding: 40px 24px;
+  max-width: 1780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--fg3);
+}
+
+.state b {
+  color: var(--fg);
+  font-size: 14px;
+}
