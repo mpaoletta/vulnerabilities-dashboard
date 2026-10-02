@@ -30,6 +30,12 @@ describe('resolveRoute', () => {
   it('#/tour se muestra como Portfolio', () => {
     expect(resolveRoute({ name: 'tour' }, has)).toEqual({ name: 'dashboard' })
   })
+  it('#/remediados existe en full y cae al Portfolio en review', () => {
+    expect(resolveRoute({ name: 'remediados' }, has)).toEqual({ name: 'remediados' })
+    expect(resolveRoute({ name: 'remediados' }, has, false)).toEqual({ name: 'remediados' })
+    expect(resolveRoute({ name: 'remediados' }, has, true)).toEqual({ name: 'dashboard' })
+    expect(resolveRoute({ name: 'repo', slug: 'existe' }, has, true)).toEqual({ name: 'repo', slug: 'existe' })
+  })
 })
 
 describe('useHashRoute', () => {

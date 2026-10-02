@@ -121,7 +121,8 @@
   cursor: pointer;
 }
 
-.secondary[data-variant='guide']:hover {
+.secondary[data-variant='guide']:hover,
+.secondary[data-variant='source']:hover {
   border-color: var(--red);
   color: var(--red);
 }

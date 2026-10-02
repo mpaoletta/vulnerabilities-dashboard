@@ -8,3 +8,10 @@ export function useDataset(): Dataset {
   if (!data) throw new Error('useDataset() fuera de <DatasetProvider>')
   return data
 }
+
+/** Recarga el dataset de la fuente actual sin volver a «Cargando…» (revalida con `ETag`). */
+export const DatasetReloadContext = createContext<() => void>(() => {})
+
+export function useDatasetReload(): () => void {
+  return useContext(DatasetReloadContext)
+}

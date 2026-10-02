@@ -57,9 +57,11 @@ export type Action =
   | { type: 'sel/update'; slug: string; items: Items; fn: (sel: Selection) => Selection }
   | { type: 'open/set'; key: string; value: boolean }
   | { type: 'open/expand'; keys: string[] }
-  | { type: 'phase/start'; key: string; snap: PhaseSnapshot; msg: string }
-  | { type: 'phase/tick'; key: string; pct: number; msg: string }
-  | { type: 'phase/done'; key: string }
+  | { type: 'phase/start'; key: string; snap: PhaseSnapshot; msg: string; label?: string }
+  | { type: 'phase/tick'; key: string; pct: number; msg: string; label?: string }
+  | { type: 'phase/done'; key: string; msg?: string; label?: string }
+  | { type: 'phase/fail'; key: string; msg: string }
+  | { type: 'phase/clear'; key: string }
   | { type: 'qa/set'; qa: QaMap }
   | { type: 'tour/patch'; patch: Partial<TourState> }
 
@@ -162,11 +164,34 @@ export function reducer(state: State, action: Action): State {
       return { ...state, open }
     }
     case 'phase/start':
-      return patchPhase(state, action.key, { run: true, done: false, pct: 0, msg: action.msg, snap: action.snap })
+      return patchPhase(state, action.key, {
+        run: true,
+        done: false,
+        failed: false,
+        pct: 0,
+        msg: action.msg,
+        snap: action.snap,
+        label: action.label,
+      })
     case 'phase/tick':
-      return patchPhase(state, action.key, { pct: action.pct, msg: action.msg })
+      return patchPhase(state, action.key, { pct: action.pct, msg: action.msg, label: action.label })
     case 'phase/done':
-      return patchPhase(state, action.key, { run: false, done: true, pct: 100, msg: 'commiteado · gate verde' })
+      return patchPhase(state, action.key, {
+        run: false,
+        done: true,
+        failed: false,
+        pct: 100,
+        msg: action.msg ?? 'commiteado · gate verde',
+        label: action.label,
+      })
+    case 'phase/fail':
+      return patchPhase(state, action.key, { run: false, done: false, failed: true, msg: action.msg, label: 'falló' })
+    case 'phase/clear': {
+      if (!(action.key in state.phases)) return state
+      const phases = { ...state.phases }
+      delete phases[action.key]
+      return { ...state, phases }
+    }
     case 'qa/set':
       return { ...state, qa: action.qa }
     case 'tour/patch':

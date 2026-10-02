@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { PhaseRunnerContext } from '../../app/phaseRunner'
 import { useStore } from '../../app/store'
 import { Pill } from '../../components/Pill'
 import { TriCheckbox, type TriState } from '../../components/TriCheckbox'
@@ -60,6 +62,8 @@ const TABS: Array<[Tab, string]> = [
 
 export function SelectionGrid({ slug, row, detail: d, items: it, sel, est }: Props) {
   const { state, dispatch } = useStore()
+  // Sólo con un portfolio real (runner de jobs); en la edición review no hay provider.
+  const realRun = !!useContext(PhaseRunnerContext)?.real
   const tab = state.tab
   const update = (fn: (s: Selection) => Selection) => dispatch({ type: 'sel/update', slug, items: it, fn })
 
@@ -261,6 +265,9 @@ export function SelectionGrid({ slug, row, detail: d, items: it, sel, est }: Pro
         <span className={styles.selLabel}>
           {selCount} de {pool.length} seleccionadas
         </span>
+        {realRun && tab === 'code' && (
+          <span className={styles.unitNote}>se corrige por archivo y severidad: elegir un hallazgo incluye los demás del mismo par</span>
+        )}
       </div>
       <div data-tour="grid" className={styles.body}>
         {groups.map((g) => {

@@ -13,13 +13,17 @@ export interface PhaseSnapshot {
   fixes: number
 }
 
-/** Estado en memoria de una ejecución simulada (`phases[slug:fase]`). */
+/** Estado en memoria de una ejecución (`phases[slug:fase]`): simulada, o reflejo de un job real. */
 export interface PhaseRun {
   run: boolean
   done: boolean
   pct: number
   msg: string
   snap: PhaseSnapshot | null
+  /** Sólo jobs reales: la fase terminó con error (vuelve a poder ejecutarse). */
+  failed?: boolean
+  /** Sólo jobs reales: etiqueta de estado que reemplaza a «en curso»/«completado» (p. ej. «en cola»). */
+  label?: string
 }
 
 export type StatusOf = (key: FixPhaseKey) => PhaseStatus

@@ -57,7 +57,7 @@ function colors(keys: string[], palette: string[], fixed?: Record<string, string
 }
 
 export function PortfolioView() {
-  const { fleet: F } = useDataset()
+  const { fleet: F, meta } = useDataset()
   const { state, dispatch } = useStore()
   const P = state.portfolio
   const R = F.repositories
@@ -342,8 +342,17 @@ export function PortfolioView() {
           </table>
         </div>
         <div className={styles.tableFoot}>
-          Nombres de repositorio anonimizados. Conteos, severidades, unidades y tiempos de review son reales; el estado de avance y
-          las proyecciones de tiempo y costo son estimados de demo.
+          {meta.source === 'database' ? (
+            <>
+              Datos reales del portfolio {meta.tenant}: conteos, severidades, unidades, estado de avance y tiempos de review salen
+              de las ejecuciones de sbom-security-orchestrator; las proyecciones de tiempo y costo de fix son estimadas.
+            </>
+          ) : (
+            <>
+              Nombres de repositorio anonimizados. Conteos, severidades, unidades y tiempos de review son reales; el estado de
+              avance y las proyecciones de tiempo y costo son estimados de demo.
+            </>
+          )}
         </div>
       </Card>
     </main>

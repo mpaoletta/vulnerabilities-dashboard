@@ -1,9 +1,12 @@
+import { useEffect } from 'react'
+import { LOCAL_ONLY_MSG } from '../../app/jobRunner'
 import { usePhaseRunnerContext } from '../../app/phaseRunner'
 import { useStore } from '../../app/store'
 import { Donut } from '../../components/Donut'
 import type { FixPhaseKey, FleetRepository } from '../../data/types'
 import type { LiveEstimate } from '../../domain/estimate'
 import { donut, n, phColor, t, usd } from '../../domain/format'
+import { isActive } from '../../data/jobs'
 import { blockedBy, ORDER, phaseKey, phaseStatus } from '../../domain/phases'
 import styles from './PhaseCards.module.css'
 
@@ -18,8 +21,15 @@ interface Props {
 export function PhaseCards({ slug, row, est, totalVulns, clean }: Props) {
   const { state } = useStore()
   const runner = usePhaseRunnerContext()
+  // Con un portfolio real las fases son jobs de la API (ver `jobRunner.ts`).
+  const real = runner.real
+  useEffect(() => {
+    real?.watch(slug)
+  }, [real, slug])
+  const job = real?.job(slug) ?? null
+  const jobActive = isActive(job)
   const statusOf = (k: FixPhaseKey) => phaseStatus(row, k, state.phases[phaseKey(slug, k)])
-  const anyRunning = ORDER.some((k) => state.phases[phaseKey(slug, k)]?.run)
+  const anyRunning = real ? jobActive : ORDER.some((k) => state.phases[phaseKey(slug, k)]?.run)
 
   const cards = ORDER.map((k, idx) => {
     const rk = phaseKey(slug, k)
@@ -31,8 +41,11 @@ export function PhaseCards({ slug, row, est, totalVulns, clean }: Props) {
     const running = st === 'running'
     const pct = done ? 100 : run?.pct || (running ? 45 : 0)
     const na = st === 'not-applicable' || (!live.t && !ph.t)
-    const blocker = blockedBy(statusOf, k)
-    const off = na || done || !!blocker
+    // En modo real no hay orden obligatorio entre fases (el job ya las ordena).
+    const blocker = real ? null : blockedBy(statusOf, k)
+    const reason = real && !na ? real.blockReason(slug, [k]) : null
+    const off = na || (real ? !!reason : done) || !!blocker
+    const label = run?.label
     return {
       key: k,
       units: na ? 'sin unidades en este repo' : ph.units,
@@ -42,22 +55,41 @@ export function PhaseCards({ slug, row, est, totalVulns, clean }: Props) {
       pct: na ? '—' : pct + '%',
       pctN: na ? 0 : pct,
       ring: donut(na ? 0 : pct, done ? 'var(--teal)' : 'var(--red)'),
-      stateLabel: na ? 'no aplica' : done ? 'completado' : running ? 'en curso' : blocker ? 'en espera de ' + blocker : 'pendiente',
-      stateColor: na ? 'var(--fg3)' : phColor(st),
+      stateLabel: na
+        ? 'no aplica'
+        : label && (running || done || run?.failed)
+          ? label
+          : done
+            ? 'completado'
+            : running
+              ? 'en curso'
+              : blocker
+                ? 'en espera de ' + blocker
+                : 'pendiente',
+      stateColor: na ? 'var(--fg3)' : run?.failed ? 'var(--bordo)' : phColor(st),
       msg: run?.msg || '',
       btnLabel: na
         ? 'Sin trabajo pendiente'
-        : done
-          ? 'Ejecutada'
-          : running
-            ? 'Ejecutando… ' + pct + '%'
-            : blocker
-              ? 'Requiere ' + blocker
-              : 'Ejecutar ' + k,
+        : running
+          ? label === 'en cola' || label === 'en espera'
+            ? 'En cola…'
+            : 'Ejecutando… ' + pct + '%'
+          : real
+            ? run?.failed
+              ? 'Reintentar ' + k
+              : done
+                ? 'Ejecutar ' + k + ' de nuevo'
+                : 'Ejecutar ' + k
+            : done
+              ? 'Ejecutada'
+              : blocker
+                ? 'Requiere ' + blocker
+                : 'Ejecutar ' + k,
+      reason,
       off,
       done,
       snap: ph,
-      disabled: na || done || running || !!blocker || anyRunning,
+      disabled: real ? na || running || !!reason : na || done || running || !!blocker || anyRunning,
     }
   })
 
@@ -73,7 +105,13 @@ export function PhaseCards({ slug, row, est, totalVulns, clean }: Props) {
   const after = [
     {
       k: 'Estado después de la remediación',
-      v: clean ? 'nada para remediar' : allDone ? 'PR abierto · pendiente de QA' : 'en curso',
+      v: clean
+        ? 'nada para remediar'
+        : allDone
+          ? real
+            ? 'commits locales · sin push'
+            : 'PR abierto · pendiente de QA'
+          : 'en curso',
       color: allDone && !clean ? 'var(--teal)' : 'var(--fg3)',
     },
     { k: 'Vulnerabilidades abiertas', v: clean ? '0' : n(open) + ' de ' + n(totalVulns), color: 'var(--fg)' },
@@ -93,6 +131,21 @@ export function PhaseCards({ slug, row, est, totalVulns, clean }: Props) {
           </span>
           <span className={styles.seq}>se ejecutan en secuencia: fixdeps → fixcode → fixsecrets</span>
         </div>
+        {real && (
+          <div className={styles.jobBar}>
+            <span className={styles.localOnly}>{LOCAL_ONLY_MSG}</span>
+            {job?.status === 'queued' && (
+              <button type="button" className={styles.cancel} onClick={() => real.cancel(slug)}>
+                Cancelar job en cola
+              </button>
+            )}
+            {real.error(slug) && (
+              <span role="alert" className={styles.jobError}>
+                {real.error(slug)}
+              </span>
+            )}
+          </div>
+        )}
         <div data-tour="fases" className={styles.cards}>
           {cards.map((c) => (
             <div key={c.key} className={styles.card} data-phase={c.key}>
@@ -133,10 +186,14 @@ export function PhaseCards({ slug, row, est, totalVulns, clean }: Props) {
                 className={styles.btn}
                 data-off={c.off || undefined}
                 disabled={c.disabled}
+                title={c.reason || undefined}
                 onClick={() => runner.start(slug, c.key)}
               >
                 {c.btnLabel}
               </button>
+              {c.reason && !jobActive && (
+                <span className={styles.reason}>{c.reason}</span>
+              )}
             </div>
           ))}
         </div>

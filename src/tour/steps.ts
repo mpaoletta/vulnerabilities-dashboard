@@ -1,4 +1,5 @@
 // Guion de la guía: port de `pickDemoRepos()` y `tourSteps()` del prototipo.
+import { READONLY } from '../app/edition'
 import type { Dataset, FleetRepository } from '../data/types'
 import { n, t } from '../domain/format'
 import type { Tab } from '../domain/selection'
@@ -20,6 +21,8 @@ export interface TourStep {
   /** Claves de grupo a expandir (`n3`, `res`), relativas al repo de la ruta. */
   expand?: string[]
   selectCritical?: boolean
+  /** Paso sobre la ejecución de la remediación: se omite en la edición review. */
+  execution?: true
 }
 
 export const ACTS = ['Acto 0 · el problema', 'Acto 1 · el portfolio', 'Acto 2 · el proyecto', 'Acto 3 · el proceso', 'Acto 4 · el resultado']
@@ -52,9 +55,10 @@ export function pickDemoRepos(D: Dataset): DemoRepos {
   return { main, topSecret, remediated }
 }
 
-const cache = new WeakMap<Dataset, TourStep[]>()
+const caches = { full: new WeakMap<Dataset, TourStep[]>(), review: new WeakMap<Dataset, TourStep[]>() }
 
-export function buildTourSteps(D: Dataset): TourStep[] {
+export function buildTourSteps(D: Dataset, readonly = READONLY): TourStep[] {
+  const cache = readonly ? caches.review : caches.full
   const hit = cache.get(D)
   if (hit) return hit
   const F = D.fleet
@@ -293,6 +297,7 @@ export function buildTourSteps(D: Dataset): TourStep[] {
       route: repo,
       target: '[data-tour="fases"]',
       clip: 320,
+      execution: true,
       title: 'Las tres fases, una después de la otra',
       body: 'fixdeps, fixcode y fixsecrets no corren en paralelo: cada una espera el gate verde de la anterior. Así una regresión siempre tiene un único culpable.',
     },
@@ -316,12 +321,13 @@ export function buildTourSteps(D: Dataset): TourStep[] {
       route: '#/remediados',
       target: '[data-tour="flows-' + remediated.slug + '"]',
       clip: 300,
+      execution: true,
       title: 'Un PR y un plan de regresión',
       body: 'Al final del proceso sale un pull request con todos los cambios verificados, y un informe que traduce cada cambio a las pantallas y endpoints que toca. QA no tiene que adivinar qué probar: lo tacha de una lista.',
     },
     { act: 4, plate: true, seconds: 6, closing: true, title: 'Detectar, corregir, verificar, entregar', body: 'Y volver a empezar.' },
   ]
-  const steps = st.map((x, i) => ({ idx: i, ...x }))
+  const steps = st.filter((x) => !(readonly && x.execution)).map((x, i) => ({ idx: i, ...x }))
   cache.set(D, steps)
   return steps
 }

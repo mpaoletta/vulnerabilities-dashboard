@@ -1,31 +1,22 @@
-import { useStore } from '../../app/store'
+import type { ReactNode } from 'react'
 import type { FleetRepository } from '../../data/types'
 import type { LiveEstimate } from '../../domain/estimate'
 import { dec, n, t, usd } from '../../domain/format'
 import type { Items } from '../../domain/items'
-import { ORDER, phaseKey, phaseStatus } from '../../domain/phases'
 import styles from './EstimatePanel.module.css'
 
 interface Props {
-  slug: string
   row: FleetRepository
   items: Items
   est: LiveEstimate
   totalVulns: number
-  onRunAll: () => void
+  /** Botón de ejecución (`RunAllButton`); ausente en la edición review. */
+  runAll?: ReactNode
 }
 
-export function EstimatePanel({ slug, row, items: it, est, totalVulns, onRunAll }: Props) {
-  const { state } = useStore()
+export function EstimatePanel({ row, items: it, est, totalVulns, runAll }: Props) {
   const clean = totalVulns === 0
   const maxT = Math.max(...est.ph.map((p) => p.t)) || 1
-  const statusOf = (k: (typeof ORDER)[number]) => phaseStatus(row, k, state.phases[phaseKey(slug, k)])
-  const allDone = ORDER.every((k) => {
-    const st = statusOf(k)
-    return st === 'done' || st === 'not-applicable'
-  })
-  const running = ORDER.some((k) => state.phases[phaseKey(slug, k)]?.run)
-  const runLabel = allDone ? 'Remediación completa' : running ? 'Ejecutando en secuencia…' : 'Ejecutar las 3 fases en secuencia'
   const note =
     'Residual sin fix: ' +
     n(row.potential) +
@@ -90,9 +81,7 @@ export function EstimatePanel({ slug, row, items: it, est, totalVulns, onRunAll 
         <span className={styles.small}>{note}</span>
       </div>
       <div className={styles.run}>
-        <button type="button" className={styles.runBtn} disabled={running} onClick={onRunAll}>
-          {runLabel}
-        </button>
+        {runAll}
         <span className={styles.disclaimer}>
           Tiempo y costo son proyecciones del modelo de estimación, no corridas medidas. Escalan con el tiempo de compilación del
           repo ({dec(row.compileTimeSeconds)} s).

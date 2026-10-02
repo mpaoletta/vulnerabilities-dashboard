@@ -1,0 +1,902 @@
+{
+ "meta": {
+  "generatedAt": "2026-09-30T04:00:13+00:00",
+  "purpose": "Datos reales del portfolio, persistidos por sbom-security-orchestrator.",
+  "rules": {
+   "type": "A/C → A, B/AB → B, N/A sin vulnerabilidades (original en sourceType)",
+   "demoState": "estado real por fase y stage (API de escritura)",
+   "estimate": "proyección con estimationModel sobre el snapshot vigente",
+   "size": "S < 150k LOC | M 150k-300k | L > 300k"
+  },
+  "demoOnly": [],
+  "estimationModel": {
+   "phaseOverheadSeconds": 60,
+   "fixdeps": {
+    "bumpSeconds": 90,
+    "bumpCompileFactor": 1.4,
+    "bumpUsd": 0.85,
+    "codeChangeSeconds": 210,
+    "codeChangeCompileFactor": 1.8,
+    "codeChangeUsd": 1.6
+   },
+   "fixcode": {
+    "secondsPerFile": 120,
+    "compileFactor": 1,
+    "usdPerFile": 0.4
+   },
+   "fixsecrets": {
+    "triageSecondsPerType": 45,
+    "triageUsdPerType": 0.12,
+    "secondsPerFile": 100,
+    "compileFactor": 0.5,
+    "usdPerFile": 0.35
+   },
+   "reviewUsd": 3.2
+  },
+  "caps": {
+   "filesPerRepo": 500,
+   "findingsPerFile": 200,
+   "note": "los listados se recortan; los totales son reales"
+  },
+  "anonymized": false,
+  "source": "database",
+  "tenant": "fixture-synthetic",
+  "estimated": [
+   "fleet.repositories[].estimate",
+   "repositories.*.estimate"
+  ]
+ },
+ "fleet": {
+  "repositoryCount": 2,
+  "totals": {
+   "dependencies": 4,
+   "code": 6,
+   "secrets": 6,
+   "secretsActive": 4,
+   "potential": 2,
+   "linesOfCode": 90000,
+   "reviewSeconds": 480.0
+  },
+  "distributions": {
+   "byType": {
+    "A": 2
+   },
+   "bySize": {
+    "S": 2
+   },
+   "byLanguage": {
+    "Java": 2
+   },
+   "byStage": {
+    "in-progress": 1,
+    "review-done": 1
+   }
+  },
+  "repositories": [
+   {
+    "slug": "demo-api",
+    "type": "A",
+    "stack": "Java, Maven, Spring",
+    "language": "Java",
+    "buildSystem": "Maven",
+    "framework": "Spring",
+    "linesOfCode": 45000,
+    "size": "S",
+    "complexity": 2100,
+    "cognitiveComplexity": 1500,
+    "duplicatedLinesDensity": 3.2,
+    "vulnerabilities": {
+     "dependencies": 1,
+     "code": 3,
+     "secrets": 3,
+     "secretsActive": 2
+    },
+    "severityCounts": {
+     "dependencies": {
+      "MEDIUM": 1
+     },
+     "code": {
+      "HIGH": 2,
+      "MEDIUM": 1
+     }
+    },
+    "potential": 1,
+    "compiles": true,
+    "compileTimeSeconds": 35.5,
+    "testCases": 80,
+    "testBaselineFailing": 0,
+    "reviewSeconds": 240.0,
+    "units": {
+     "fixdeps": 2,
+     "fixcode": 2,
+     "fixsecrets": 1
+    },
+    "unitDetail": {
+     "depsSimple": 1,
+     "depsCodeChange": 1,
+     "sastFiles": 2,
+     "secretTypes": 1,
+     "secretFiles": 1
+    },
+    "estimate": {
+     "fixdeps": {
+      "units": 2,
+      "seconds": 473.6,
+      "usd": 2.45
+     },
+     "fixcode": {
+      "units": 2,
+      "seconds": 371.0,
+      "usd": 0.8
+     },
+     "fixsecrets": {
+      "units": 2,
+      "seconds": 222.8,
+      "usd": 0.47
+     },
+     "total": {
+      "seconds": 1067.3,
+      "usd": 3.72
+     }
+    },
+    "demoState": {
+     "stage": "in-progress",
+     "phases": [
+      {
+       "phase": "review",
+       "status": "done"
+      },
+      {
+       "phase": "fixdeps",
+       "status": "done"
+      },
+      {
+       "phase": "fixcode",
+       "status": "pending"
+      },
+      {
+       "phase": "fixsecrets",
+       "status": "pending"
+      }
+     ]
+    },
+    "hasDetail": true,
+    "actual": {
+     "fixdeps": {
+      "seconds": 720.0,
+      "usd": 0.75
+     },
+     "fixcode": null,
+     "fixsecrets": null
+    }
+   },
+   {
+    "slug": "legacy-web",
+    "type": "A",
+    "stack": "Java, Maven, Spring",
+    "language": "Java",
+    "buildSystem": "Maven",
+    "framework": "Spring",
+    "linesOfCode": 45000,
+    "size": "S",
+    "complexity": 2100,
+    "cognitiveComplexity": 1500,
+    "duplicatedLinesDensity": 3.2,
+    "vulnerabilities": {
+     "dependencies": 3,
+     "code": 3,
+     "secrets": 3,
+     "secretsActive": 2
+    },
+    "severityCounts": {
+     "dependencies": {
+      "CRITICAL": 1,
+      "HIGH": 1,
+      "MEDIUM": 1
+     },
+     "code": {
+      "HIGH": 2,
+      "MEDIUM": 1
+     }
+    },
+    "potential": 1,
+    "compiles": true,
+    "compileTimeSeconds": 35.5,
+    "testCases": 80,
+    "testBaselineFailing": 0,
+    "reviewSeconds": 240.0,
+    "units": {
+     "fixdeps": 2,
+     "fixcode": 2,
+     "fixsecrets": 1
+    },
+    "unitDetail": {
+     "depsSimple": 1,
+     "depsCodeChange": 1,
+     "sastFiles": 2,
+     "secretTypes": 1,
+     "secretFiles": 1
+    },
+    "estimate": {
+     "fixdeps": {
+      "units": 2,
+      "seconds": 473.6,
+      "usd": 2.45
+     },
+     "fixcode": {
+      "units": 2,
+      "seconds": 371.0,
+      "usd": 0.8
+     },
+     "fixsecrets": {
+      "units": 2,
+      "seconds": 222.8,
+      "usd": 0.47
+     },
+     "total": {
+      "seconds": 1067.3,
+      "usd": 3.72
+     }
+    },
+    "demoState": {
+     "stage": "review-done",
+     "phases": [
+      {
+       "phase": "review",
+       "status": "done"
+      },
+      {
+       "phase": "fixdeps",
+       "status": "pending"
+      },
+      {
+       "phase": "fixcode",
+       "status": "pending"
+      },
+      {
+       "phase": "fixsecrets",
+       "status": "pending"
+      }
+     ]
+    },
+    "hasDetail": true,
+    "actual": {
+     "fixdeps": null,
+     "fixcode": null,
+     "fixsecrets": null
+    }
+   }
+  ]
+ },
+ "repositories": {
+  "demo-api": {
+   "slug": "demo-api",
+   "classification": {
+    "type": "A",
+    "sourceType": "A",
+    "rationale": "No architectural (type B) dependencies.",
+    "blocking": []
+   },
+   "stack": {
+    "language": "Java",
+    "buildSystem": "Maven",
+    "framework": "Spring"
+   },
+   "runtime": {
+    "java": "21"
+   },
+   "sbom": {
+    "componentCount": 120,
+    "byEcosystem": {
+     "maven": 120
+    }
+   },
+   "codeMetrics": {
+    "linesOfCode": 45000,
+    "classes": 310,
+    "complexity": 2100,
+    "cognitiveComplexity": 1500,
+    "duplicatedLinesDensity": 3.2
+   },
+   "compile": {
+    "status": "passed",
+    "seconds": 35.5,
+    "requiredEnvVars": []
+   },
+   "tests": {
+    "hasTests": true,
+    "testFiles": 12,
+    "testCases": 80,
+    "frameworks": [
+     "JUnit"
+    ]
+   },
+   "testBaseline": {
+    "status": "passed",
+    "compile": true,
+    "command": "mvn test"
+   },
+   "timing": {
+    "phases": [
+     {
+      "name": "review",
+      "startedAt": "2026-09-29T10:00:00+00:00",
+      "completedAt": "2026-09-29T10:04:00+00:00",
+      "durationSeconds": 240.0,
+      "compileTestSeconds": 35.5
+     },
+     {
+      "name": "fixdeps",
+      "startedAt": "2026-09-29T11:00:00+00:00",
+      "completedAt": "2026-09-29T11:12:00+00:00",
+      "durationSeconds": 720.0
+     }
+    ],
+    "totalSeconds": 960.0
+   },
+   "dependencies": {
+    "total": 1,
+    "severityCounts": {
+     "MEDIUM": 1
+    },
+    "byType": {
+     "B": 1
+    },
+    "plan": {
+     "levels": [
+      {
+       "level": 1,
+       "key": "minor",
+       "title": "Bumps menores",
+       "applied": true,
+       "vulnerabilitiesFixed": 1,
+       "vulnerabilitiesRemaining": 2,
+       "dependenciesUpdated": 1,
+       "severityCounts": {
+        "CRITICAL": 1
+       },
+       "updates": [
+        {
+         "package": "org.example:core",
+         "ecosystem": "maven",
+         "dependencyType": "direct",
+         "currentVersion": "1.0.0",
+         "targetVersion": "1.0.5",
+         "targetPackage": null,
+         "targetSource": "osv",
+         "requiresCodeChange": false,
+         "catalogRef": null,
+         "severity": "UNKNOWN",
+         "severityCounts": {},
+         "fixedVulnerabilityIds": [
+          "CVE-2024-0001"
+         ],
+         "fixesCount": 1
+        }
+       ]
+      },
+      {
+       "level": 2,
+       "key": "a",
+       "title": "Bumps mayores",
+       "applied": true,
+       "vulnerabilitiesFixed": 1,
+       "vulnerabilitiesRemaining": 1,
+       "dependenciesUpdated": 1,
+       "severityCounts": {
+        "HIGH": 1
+       },
+       "updates": [
+        {
+         "package": "org.example:web",
+         "ecosystem": "maven",
+         "dependencyType": "transitive",
+         "currentVersion": "2.1.0",
+         "targetVersion": "3.0.0",
+         "targetPackage": null,
+         "targetSource": "catalog",
+         "requiresCodeChange": true,
+         "catalogRef": null,
+         "severity": "UNKNOWN",
+         "severityCounts": {},
+         "fixedVulnerabilityIds": [
+          "CVE-2024-0002"
+         ],
+         "fixesCount": 1
+        }
+       ]
+      },
+      {
+       "level": 3,
+       "key": "c",
+       "title": "Swaps",
+       "applied": true,
+       "vulnerabilitiesFixed": 0,
+       "vulnerabilitiesRemaining": 1,
+       "dependenciesUpdated": 0,
+       "severityCounts": {},
+       "updates": []
+      },
+      {
+       "level": 4,
+       "key": "b",
+       "title": "Arquitectura",
+       "applied": false,
+       "vulnerabilitiesFixed": 0,
+       "vulnerabilitiesRemaining": 1,
+       "dependenciesUpdated": 0,
+       "severityCounts": {},
+       "updates": []
+      }
+     ],
+     "residualByPackage": [
+      {
+       "package": "org.legacy:xml",
+       "ecosystem": "maven",
+       "installedVersion": "0.9",
+       "dependencyType": "direct",
+       "severity": "MEDIUM",
+       "severityCounts": {
+        "MEDIUM": 1
+       },
+       "vulnerabilityIds": [
+        "CVE-2024-0003"
+       ],
+       "count": 1
+      }
+     ],
+     "residualTotal": 1,
+     "potentialAfterLevel3": 1
+    }
+   },
+   "sast": {
+    "total": 3,
+    "qualityGate": "ERROR",
+    "severityCounts": {
+     "HIGH": 2,
+     "MEDIUM": 1
+    },
+    "byRule": {
+     "java:S2076": 2,
+     "java:S5332": 1
+    },
+    "files": [
+     {
+      "file": "src/main/java/App.java",
+      "total": 2,
+      "severityCounts": {
+       "HIGH": 2
+      },
+      "findings": [
+       {
+        "id": "AX1",
+        "rule": "java:S2076",
+        "severity": "HIGH",
+        "line": 42,
+        "kind": "vulnerability",
+        "message": "OS command injection"
+       },
+       {
+        "id": "AX2",
+        "rule": "java:S2076",
+        "severity": "HIGH",
+        "line": 77,
+        "kind": "vulnerability",
+        "message": "OS command injection"
+       }
+      ]
+     },
+     {
+      "file": "src/main/java/Http.java",
+      "total": 1,
+      "severityCounts": {
+       "MEDIUM": 1
+      },
+      "findings": [
+       {
+        "id": "AX3",
+        "rule": "java:S5332",
+        "severity": "MEDIUM",
+        "line": 10,
+        "kind": "hotspot",
+        "message": "Clear-text protocol"
+       }
+      ]
+     }
+    ]
+   },
+   "secrets": {
+    "total": 3,
+    "active": 2,
+    "byType": {
+     "AWS Access Key": 2,
+     "Secret Keyword": 1
+    },
+    "filesTotal": 2,
+    "activeFiles": 1,
+    "files": [
+     {
+      "file": "config/app.yml",
+      "total": 2,
+      "active": 2,
+      "findings": [
+       {
+        "type": "AWS Access Key",
+        "line": 3,
+        "verified": true,
+        "falsePositive": false
+       },
+       {
+        "type": "AWS Access Key",
+        "line": 4,
+        "verified": false,
+        "falsePositive": false
+       }
+      ]
+     },
+     {
+      "file": "README.md",
+      "total": 1,
+      "active": 0,
+      "findings": [
+       {
+        "type": "Secret Keyword",
+        "line": 20,
+        "verified": false,
+        "falsePositive": true
+       }
+      ]
+     }
+    ]
+   },
+   "units": {
+    "fixdeps": 2,
+    "fixcode": 2,
+    "fixsecrets": 1
+   },
+   "unitDetail": {
+    "depsSimple": 1,
+    "depsCodeChange": 1,
+    "sastFiles": 2,
+    "secretTypes": 1,
+    "secretFiles": 1
+   },
+   "estimate": {
+    "fixdeps": {
+     "units": 2,
+     "seconds": 473.6,
+     "usd": 2.45
+    },
+    "fixcode": {
+     "units": 2,
+     "seconds": 371.0,
+     "usd": 0.8
+    },
+    "fixsecrets": {
+     "units": 2,
+     "seconds": 222.8,
+     "usd": 0.47
+    },
+    "total": {
+     "seconds": 1067.3,
+     "usd": 3.72
+    }
+   }
+  },
+  "legacy-web": {
+   "slug": "legacy-web",
+   "classification": {
+    "type": "A",
+    "sourceType": "A",
+    "rationale": "No architectural (type B) dependencies.",
+    "blocking": []
+   },
+   "stack": {
+    "language": "Java",
+    "buildSystem": "Maven",
+    "framework": "Spring"
+   },
+   "runtime": {
+    "java": "21"
+   },
+   "sbom": {
+    "componentCount": 120,
+    "byEcosystem": {
+     "maven": 120
+    }
+   },
+   "codeMetrics": {
+    "linesOfCode": 45000,
+    "classes": 310,
+    "complexity": 2100,
+    "cognitiveComplexity": 1500,
+    "duplicatedLinesDensity": 3.2
+   },
+   "compile": {
+    "status": "passed",
+    "seconds": 35.5,
+    "requiredEnvVars": []
+   },
+   "tests": {
+    "hasTests": true,
+    "testFiles": 12,
+    "testCases": 80,
+    "frameworks": [
+     "JUnit"
+    ]
+   },
+   "testBaseline": {
+    "status": "passed",
+    "compile": true,
+    "command": "mvn test"
+   },
+   "timing": {
+    "phases": [
+     {
+      "name": "review",
+      "startedAt": "2026-09-29T10:00:00+00:00",
+      "completedAt": "2026-09-29T10:04:00+00:00",
+      "durationSeconds": 240.0,
+      "compileTestSeconds": 35.5
+     }
+    ],
+    "totalSeconds": 240.0
+   },
+   "dependencies": {
+    "total": 3,
+    "severityCounts": {
+     "CRITICAL": 1,
+     "HIGH": 1,
+     "MEDIUM": 1
+    },
+    "byType": {
+     "A": 2,
+     "B": 1
+    },
+    "plan": {
+     "levels": [
+      {
+       "level": 1,
+       "key": "minor",
+       "title": "Bumps menores",
+       "applied": true,
+       "vulnerabilitiesFixed": 1,
+       "vulnerabilitiesRemaining": 2,
+       "dependenciesUpdated": 1,
+       "severityCounts": {
+        "CRITICAL": 1
+       },
+       "updates": [
+        {
+         "package": "org.example:core",
+         "ecosystem": "maven",
+         "dependencyType": "direct",
+         "currentVersion": "1.0.0",
+         "targetVersion": "1.0.5",
+         "targetPackage": null,
+         "targetSource": "osv",
+         "requiresCodeChange": false,
+         "catalogRef": null,
+         "severity": "CRITICAL",
+         "severityCounts": {
+          "CRITICAL": 1
+         },
+         "fixedVulnerabilityIds": [
+          "CVE-2024-0001"
+         ],
+         "fixesCount": 1
+        }
+       ]
+      },
+      {
+       "level": 2,
+       "key": "a",
+       "title": "Bumps mayores",
+       "applied": true,
+       "vulnerabilitiesFixed": 1,
+       "vulnerabilitiesRemaining": 1,
+       "dependenciesUpdated": 1,
+       "severityCounts": {
+        "HIGH": 1
+       },
+       "updates": [
+        {
+         "package": "org.example:web",
+         "ecosystem": "maven",
+         "dependencyType": "transitive",
+         "currentVersion": "2.1.0",
+         "targetVersion": "3.0.0",
+         "targetPackage": null,
+         "targetSource": "catalog",
+         "requiresCodeChange": true,
+         "catalogRef": null,
+         "severity": "HIGH",
+         "severityCounts": {
+          "HIGH": 1
+         },
+         "fixedVulnerabilityIds": [
+          "CVE-2024-0002"
+         ],
+         "fixesCount": 1
+        }
+       ]
+      },
+      {
+       "level": 3,
+       "key": "c",
+       "title": "Swaps",
+       "applied": true,
+       "vulnerabilitiesFixed": 0,
+       "vulnerabilitiesRemaining": 1,
+       "dependenciesUpdated": 0,
+       "severityCounts": {},
+       "updates": []
+      },
+      {
+       "level": 4,
+       "key": "b",
+       "title": "Arquitectura",
+       "applied": false,
+       "vulnerabilitiesFixed": 0,
+       "vulnerabilitiesRemaining": 1,
+       "dependenciesUpdated": 0,
+       "severityCounts": {},
+       "updates": []
+      }
+     ],
+     "residualByPackage": [
+      {
+       "package": "org.legacy:xml",
+       "ecosystem": "maven",
+       "installedVersion": "0.9",
+       "dependencyType": "direct",
+       "severity": "MEDIUM",
+       "severityCounts": {
+        "MEDIUM": 1
+       },
+       "vulnerabilityIds": [
+        "CVE-2024-0003"
+       ],
+       "count": 1
+      }
+     ],
+     "residualTotal": 1,
+     "potentialAfterLevel3": 1
+    }
+   },
+   "sast": {
+    "total": 3,
+    "qualityGate": "ERROR",
+    "severityCounts": {
+     "HIGH": 2,
+     "MEDIUM": 1
+    },
+    "byRule": {
+     "java:S2076": 2,
+     "java:S5332": 1
+    },
+    "files": [
+     {
+      "file": "src/main/java/App.java",
+      "total": 2,
+      "severityCounts": {
+       "HIGH": 2
+      },
+      "findings": [
+       {
+        "id": "AX1",
+        "rule": "java:S2076",
+        "severity": "HIGH",
+        "line": 42,
+        "kind": "vulnerability",
+        "message": "OS command injection"
+       },
+       {
+        "id": "AX2",
+        "rule": "java:S2076",
+        "severity": "HIGH",
+        "line": 77,
+        "kind": "vulnerability",
+        "message": "OS command injection"
+       }
+      ]
+     },
+     {
+      "file": "src/main/java/Http.java",
+      "total": 1,
+      "severityCounts": {
+       "MEDIUM": 1
+      },
+      "findings": [
+       {
+        "id": "AX3",
+        "rule": "java:S5332",
+        "severity": "MEDIUM",
+        "line": 10,
+        "kind": "hotspot",
+        "message": "Clear-text protocol"
+       }
+      ]
+     }
+    ]
+   },
+   "secrets": {
+    "total": 3,
+    "active": 2,
+    "byType": {
+     "AWS Access Key": 2,
+     "Secret Keyword": 1
+    },
+    "filesTotal": 2,
+    "activeFiles": 1,
+    "files": [
+     {
+      "file": "config/app.yml",
+      "total": 2,
+      "active": 2,
+      "findings": [
+       {
+        "type": "AWS Access Key",
+        "line": 3,
+        "verified": true,
+        "falsePositive": false
+       },
+       {
+        "type": "AWS Access Key",
+        "line": 4,
+        "verified": false,
+        "falsePositive": false
+       }
+      ]
+     },
+     {
+      "file": "README.md",
+      "total": 1,
+      "active": 0,
+      "findings": [
+       {
+        "type": "Secret Keyword",
+        "line": 20,
+        "verified": false,
+        "falsePositive": true
+       }
+      ]
+     }
+    ]
+   },
+   "units": {
+    "fixdeps": 2,
+    "fixcode": 2,
+    "fixsecrets": 1
+   },
+   "unitDetail": {
+    "depsSimple": 1,
+    "depsCodeChange": 1,
+    "sastFiles": 2,
+    "secretTypes": 1,
+    "secretFiles": 1
+   },
+   "estimate": {
+    "fixdeps": {
+     "units": 2,
+     "seconds": 473.6,
+     "usd": 2.45
+    },
+    "fixcode": {
+     "units": 2,
+     "seconds": 371.0,
+     "usd": 0.8
+    },
+    "fixsecrets": {
+     "units": 2,
+     "seconds": 222.8,
+     "usd": 0.47
+    },
+    "total": {
+     "seconds": 1067.3,
+     "usd": 3.72
+    }
+   }
+  }
+ }
+}

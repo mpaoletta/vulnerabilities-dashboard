@@ -6,8 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:review": "tsc -b && vite build --mode review",
+    "check:review-bundle": "node scripts/check-review-bundle.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
+    "preview:review": "vite preview --outDir dist-review",
     "test": "vitest run",
     "test:watch": "vitest"
   },
