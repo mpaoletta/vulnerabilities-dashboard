@@ -12,6 +12,7 @@ import { ConnectionDialog } from './ConnectionDialog'
 import { READONLY } from './edition'
 import { Header } from './Header'
 import { PhaseRunnerContext, usePhaseRunner } from './phaseRunner'
+import { ReviewRunnerContext, useReviewRunner } from './reviewRunner'
 import { navigate, resolveRoute } from './route'
 import { useStore, type State } from './store'
 import { StoreProvider } from './StoreProvider'
@@ -20,10 +21,18 @@ import { useHashRoute } from './useHashRoute'
 /** Demora del deep link `#/tour`, como en el prototipo. */
 export const TOUR_DEEPLINK_DELAY_MS = 400
 
-/** Controller de ejecución de fases: sólo existe en la edición full. */
+/** Controllers de ejecución (fases y reviews): sólo existen en la edición full. */
 function ExecutionProvider({ children }: { children: ReactNode }) {
-  const runner = usePhaseRunner(useStore(), useDataset(), useConnection())
-  return <PhaseRunnerContext.Provider value={runner}>{children}</PhaseRunnerContext.Provider>
+  const data = useDataset()
+  const connection = useConnection()
+  const runner = usePhaseRunner(useStore(), data, connection)
+  const real = data.meta.source === 'database' && connection ? connection : null
+  const reviews = useReviewRunner(real)
+  return (
+    <PhaseRunnerContext.Provider value={runner}>
+      <ReviewRunnerContext.Provider value={real ? reviews : null}>{children}</ReviewRunnerContext.Provider>
+    </PhaseRunnerContext.Provider>
+  )
 }
 
 function Shell() {

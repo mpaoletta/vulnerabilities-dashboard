@@ -59,7 +59,7 @@ export type Action =
   | { type: 'open/expand'; keys: string[] }
   | { type: 'phase/start'; key: string; snap: PhaseSnapshot; msg: string; label?: string }
   | { type: 'phase/tick'; key: string; pct: number; msg: string; label?: string }
-  | { type: 'phase/done'; key: string; msg?: string; label?: string }
+  | { type: 'phase/done'; key: string; msg?: string; label?: string; pct?: number }
   | { type: 'phase/fail'; key: string; msg: string }
   | { type: 'phase/clear'; key: string }
   | { type: 'qa/set'; qa: QaMap }
@@ -180,7 +180,7 @@ export function reducer(state: State, action: Action): State {
         run: false,
         done: true,
         failed: false,
-        pct: 100,
+        pct: action.pct ?? 100,
         msg: action.msg ?? 'commiteado · gate verde',
         label: action.label,
       })

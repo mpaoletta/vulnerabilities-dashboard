@@ -134,6 +134,13 @@
   min-height: 15px;
 }
 
+.last {
+  display: block;
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--fg2);
+}
+
 .btn {
   width: 100%;
   font-size: 13.5px;

@@ -7,6 +7,7 @@ import type { FixPhaseKey, FleetRepository } from '../../data/types'
 import type { LiveEstimate } from '../../domain/estimate'
 import { donut, n, phColor, t, usd } from '../../domain/format'
 import { isActive } from '../../data/jobs'
+import { lastRunText } from '../../domain/lastRun'
 import { blockedBy, ORDER, phaseKey, phaseStatus } from '../../domain/phases'
 import styles from './PhaseCards.module.css'
 
@@ -39,7 +40,8 @@ export function PhaseCards({ slug, row, est, totalVulns, clean }: Props) {
     const ph = (run?.run || run?.done) && run.snap ? run.snap : { units: live.units, t: live.t, c: live.c, fixes: live.fixes }
     const done = st === 'done'
     const running = st === 'running'
-    const pct = done ? 100 : run?.pct || (running ? 45 : 0)
+    // Un job real terminado guarda el % de unidades CORREGIDAS (las salteadas no cuentan).
+    const pct = done ? (run?.done ? run.pct : 100) : run?.pct || (running ? 45 : 0)
     const na = st === 'not-applicable' || (!live.t && !ph.t)
     // En modo real no hay orden obligatorio entre fases (el job ya las ordena).
     const blocker = real ? null : blockedBy(statusOf, k)
@@ -68,6 +70,8 @@ export function PhaseCards({ slug, row, est, totalVulns, clean }: Props) {
                 : 'pendiente',
       stateColor: na ? 'var(--fg3)' : run?.failed ? 'var(--bordo)' : phColor(st),
       msg: run?.msg || '',
+      // Lo que corrigió la última ejecución, aunque la fase haya vuelto a pendiente.
+      last: na || running ? '' : lastRunText(row.lastRun?.[k]),
       btnLabel: na
         ? 'Sin trabajo pendiente'
         : running
@@ -180,6 +184,7 @@ export function PhaseCards({ slug, row, est, totalVulns, clean }: Props) {
                   <i style={{ background: c.stateColor, width: c.pctN + '%' }} />
                 </div>
                 <span className={styles.msg}>{c.msg}</span>
+                {c.last && <span className={styles.last}>{c.last}</span>}
               </div>
               <button
                 type="button"

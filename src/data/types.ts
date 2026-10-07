@@ -114,6 +114,17 @@ export interface FleetRepository {
   hasDetail: boolean
   /** Tiempo y costo medidos de la última ejecución terminal de cada fase de fix. */
   actual?: Partial<Record<FixPhaseKey, { seconds: number; usd?: number | null } | null>>
+  /** Resultado de la última ejecución terminal de cada fase de fix, según sus propios veredictos. */
+  lastRun?: Partial<Record<FixPhaseKey, PhaseLastRun | null>>
+}
+
+export interface PhaseLastRun {
+  status: string
+  completedAt?: string | null
+  exitCode?: number | null
+  stoppedReason?: string | null
+  fixed: number
+  notFixed: number
 }
 
 export interface Fleet {
@@ -381,8 +392,9 @@ export interface RemediationJob {
   id: string
   repository: string
   status: JobStatus
-  phases: FixPhaseKey[]
-  currentPhase: FixPhaseKey | null
+  /** Fases de corrección, o `['review']` solo (add-worker-triggered-review). */
+  phases: PhaseKey[]
+  currentPhase: PhaseKey | null
   selection: JobSelection
   units?: Partial<Record<FixPhaseKey, string[]>>
   progress?: Partial<Record<FixPhaseKey, JobProgress>>
@@ -399,4 +411,16 @@ export interface RemediationJob {
   claimedAt?: string | null
   startedAt?: string | null
   completedAt?: string | null
+}
+
+// --- Repos sin review (add-worker-triggered-review) ---
+
+/** Un clone que anuncia un worker en línea sin review vigente, o un repo registrado sin review. */
+export interface UnreviewedRepository {
+  slug: string
+  /** Existe en la API (p. ej. un review disparado que falló, o un reset). */
+  registered: boolean
+  /** Workers en línea que lo tienen clonado. */
+  workers: Array<{ workerId: string; hostname?: string | null }>
+  activeJob: { id: string; status: JobStatus; phases: PhaseKey[]; hostname?: string | null } | null
 }

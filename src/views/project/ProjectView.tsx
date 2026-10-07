@@ -1,9 +1,11 @@
 import { useMemo } from 'react'
 import { READONLY } from '../../app/edition'
+import { useReviewRunnerContext } from '../../app/reviewRunner'
 import { selectionFor, useStore } from '../../app/store'
 import { Card } from '../../components/Card'
 import { Donut } from '../../components/Donut'
 import { Hexagon } from '../../components/Hexagon'
+import { ReviewControls } from '../../components/ReviewControls'
 import { SectionLabel } from '../../components/SectionLabel'
 import { useConnection } from '../../data/connection'
 import { useDataset } from '../../data/context'
@@ -28,6 +30,7 @@ const blockName = (b: unknown) =>
 export function ProjectView({ slug }: { slug: string }) {
   const D = useDataset()
   const connection = useConnection()
+  const reviews = useReviewRunnerContext()
   const { state } = useStore()
   const R = D.fleet.repositories
   const row = R.find((r) => r.slug === slug)!
@@ -151,6 +154,9 @@ export function ProjectView({ slug }: { slug: string }) {
           ))}
         </div>
       </div>
+
+      {/* add-worker-triggered-review: sólo con un portfolio real (el contexto es null en la demo). */}
+      {reviews && <ReviewControls runner={reviews} slug={slug} rerun />}
 
       <section data-tour="hero" className={styles.hero}>
         <Card pad="lg" data-tour="hero-tipo" className={styles.heroCard}>

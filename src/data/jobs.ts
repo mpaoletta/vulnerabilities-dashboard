@@ -2,7 +2,7 @@
 // que el dashboard necesita para habilitar la ejecución: scope de la key y workers conectados.
 import type { Connection } from './connection'
 import { ApiError, tenantRequest } from './source'
-import type { FixPhaseKey, JobCreate, KeyInfo, RemediationJob, WorkerInfo } from './types'
+import type { FixPhaseKey, JobCreate, KeyInfo, RemediationJob, UnreviewedRepository, WorkerInfo } from './types'
 
 const repoPath = (slug: string) => `repositories/${encodeURIComponent(slug)}/jobs`
 
@@ -15,13 +15,24 @@ export async function createJob(c: Connection, slug: string, body: JobCreate): P
   return required(await tenantRequest<RemediationJob>(c, repoPath(slug), { method: 'POST', body }), 'el job')
 }
 
+/** Encola el review del repo; la API lo registra si todavía no existe y un worker lo anuncia. */
+export async function createReviewJob(c: Connection, slug: string): Promise<RemediationJob> {
+  return required(await tenantRequest<RemediationJob>(c, repoPath(slug), { method: 'POST', body: { phases: ['review'] } }), 'el job')
+}
+
+/** Clones sin review de los workers en línea y repos registrados sin review. */
+export async function listUnreviewed(c: Connection): Promise<UnreviewedRepository[]> {
+  return (await tenantRequest<UnreviewedRepository[]>(c, 'unreviewed-repositories')) ?? []
+}
+
 export async function getJob(c: Connection, slug: string, id: string): Promise<RemediationJob> {
   return required(await tenantRequest<RemediationJob>(c, `${repoPath(slug)}/${encodeURIComponent(id)}`), 'el job')
 }
 
-/** El job activo del repo (`queued`/`claimed`/`running`), o `null`. */
-export async function getActiveJob(c: Connection, slug: string): Promise<RemediationJob | null> {
-  const jobs = await tenantRequest<RemediationJob[]>(c, `${repoPath(slug)}?active=true`)
+/** El último job del repo (activo o terminado), o `null`: al abrir el proyecto, uno terminado
+ * todavía explica el resultado de sus fases (p. ej. unidades salteadas). */
+export async function getLatestJob(c: Connection, slug: string): Promise<RemediationJob | null> {
+  const jobs = await tenantRequest<RemediationJob[]>(c, repoPath(slug))
   return jobs && jobs.length ? jobs[0] : null
 }
 
@@ -55,11 +66,14 @@ const REASONS: Record<string, string> = {
   'stale-selection': 'hubo un review nuevo; volvé a ejecutar sobre los datos actuales',
   'worker-stopped': 'el worker se detuvo durante la ejecución',
   'phase-failed': 'la fase terminó con error',
+  'branch-failed': 'no se pudo crear el branch (¿el clone tiene al menos un commit?)',
+  'repository-reset': 'se borró el review del clone',
 }
 
 /** Motivo legible de un job fallido (por `reason`, o por el exit code si no hay `reason`). */
 export function failureText(job: Pick<RemediationJob, 'reason' | 'message' | 'exitCode'>): string {
-  const byExit = job.exitCode === 8 ? REASONS['dirty-working-tree'] : job.exitCode === 23 ? REASONS['missing-env-vars'] : null
+  const BY_EXIT: Record<number, string> = { 8: 'dirty-working-tree', 9: 'branch-failed', 23: 'missing-env-vars' }
+  const byExit = job.exitCode != null && BY_EXIT[job.exitCode] ? REASONS[BY_EXIT[job.exitCode]] : null
   const text = (job.reason && REASONS[job.reason]) || byExit || job.message || job.reason || 'error'
   return job.exitCode !== null && job.exitCode !== undefined ? `${text} (exit ${job.exitCode})` : text
 }

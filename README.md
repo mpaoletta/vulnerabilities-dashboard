@@ -99,6 +99,16 @@ en la máquina de los clones; **los cambios quedan commiteados en el clone local
 - Código: `src/data/jobs.ts` (cliente), `src/domain/jobSelection.ts` (selección → job), `src/app/jobRunner.ts`
   (runner real; `phaseRunner.ts` elige entre éste y el simulado).
 
+### Review desde el dashboard
+
+Con un portfolio conectado, el portfolio muestra **«Sin review»**: los clones que anuncian los workers en
+línea y todavía no tienen review (`GET …/unreviewed-repositories`, releído cada 15 s). «Ejecutar review»
+encola un job `phases: ["review"]` que corre el worker que tiene el clone. Al terminar bien, el dataset se
+recarga y el repo pasa a la flota. La vista de un repo revisado ofrece «Re-ejecutar review», con
+confirmación porque reemplaza el review vigente. Mismos motivos de bloqueo que las fases (key `read`, sin
+worker, job activo). Código: `src/app/reviewRunner.ts`, `src/components/ReviewControls.tsx`,
+`src/views/portfolio/UnreviewedSection.tsx`.
+
 Para correr la app hace falta la API levantada:
 
 ```bash

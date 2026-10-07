@@ -10,15 +10,15 @@ import {
   cancelJob,
   createJob,
   failureText,
-  getActiveJob,
   getJob,
   getKeyInfo,
+  getLatestJob,
   isActive,
   listWorkers,
   unresolvedItems,
 } from '../data/jobs'
 import { ApiError } from '../data/source'
-import type { Dataset, FixPhaseKey, KeyInfo, RemediationJob, WorkerInfo } from '../data/types'
+import type { Dataset, FixPhaseKey, JobProgress, KeyInfo, RemediationJob, WorkerInfo } from '../data/types'
 import { estimate } from '../domain/estimate'
 import { itemsFor } from '../domain/items'
 import { jobBody, jobSelection } from '../domain/jobSelection'
@@ -50,6 +50,17 @@ function planFor(data: Dataset, state: Store['state'], slug: string) {
 const finishedOk = (job: RemediationJob, p: FixPhaseKey) => {
   const r = job.phaseResults?.[p]
   return !!r && (r.exitCode === 0 || r.exitCode === 1)
+}
+
+/** Resultado de una fase terminada: las salteadas no son correcciones, así que «completado» sólo
+ * cuando no hubo ninguna, y el % es el de unidades corregidas. */
+export function finishedOutcome(prog: JobProgress | undefined): { msg: string; label?: string; pct: number } {
+  const done = prog?.done ?? 0
+  const skipped = prog?.skipped ?? 0
+  const pct = prog && prog.total ? Math.min(100, Math.round((done / prog.total) * 100)) : 100
+  if (!skipped) return { msg: 'commiteado en el clone local', pct }
+  if (!done) return { msg: 'nada commiteado · el motivo de cada una está en el ledger (skipped/)', label: skipped + ' salteadas, 0 corregidas', pct }
+  return { msg: done + ' corregidas · commiteadas en el clone local', label: skipped + ' salteadas, ' + done + ' corregidas', pct }
 }
 
 /** Texto de la tarjeta para una fase pendiente dentro de un job todavía activo. */
@@ -101,14 +112,8 @@ export function useJobRunner(store: Store, data: Dataset, connection: Connection
           if (!cur?.run && plan) dispatch({ type: 'phase/start', key: k, snap: cur?.snap || plan.snap(p), msg, label })
         }
         if (finishedOk(job, p) || ((job.status === 'succeeded' || job.status === 'partial') && !job.phaseResults?.[p])) {
-          const skipped = prog?.skipped ?? 0
           if (!cur?.run && plan && !cur?.snap) dispatch({ type: 'phase/start', key: k, snap: plan.snap(p), msg: '' })
-          dispatch({
-            type: 'phase/done',
-            key: k,
-            msg: skipped ? skipped + ' unidades saltadas · el resto commiteado en el clone local' : 'commiteado en el clone local',
-            label: skipped ? 'parcial' : undefined,
-          })
+          dispatch({ type: 'phase/done', key: k, ...finishedOutcome(prog) })
         } else if (job.status === 'failed') {
           if (failedShown) dispatch({ type: 'phase/clear', key: k })
           else dispatch({ type: 'phase/fail', key: k, msg: failureText(job) })
@@ -194,12 +199,21 @@ export function useJobRunner(store: Store, data: Dataset, connection: Connection
       void refreshWorkers()
       if (watched.current.has(slug)) return
       watched.current.add(slug)
-      getActiveJob(connection, slug).then(
-        (job) => job && track(slug, job),
+      getLatestJob(connection, slug).then(
+        (job) => {
+          if (!job) return
+          if (isActive(job)) return track(slug, job)
+          if (job.status !== 'succeeded' && job.status !== 'partial') return
+          // Un job terminado sólo explica las fases cuyo estado actual (API) sigue siendo su
+          // resultado: tras un review nuevo esas fases vuelven a pendiente y el job ya no aplica.
+          const row = data.fleet.repositories.find((r) => r.slug === slug)
+          const current = job.phases.filter((p) => row?.demoState.phases.find((x) => x.phase === p)?.status === 'done')
+          if (current.length) apply(slug, { ...job, phases: current })
+        },
         () => watched.current.delete(slug),
       )
     },
-    [connection, refreshWorkers, track],
+    [apply, connection, data, refreshWorkers, track],
   )
 
   const blockReason = useCallback(

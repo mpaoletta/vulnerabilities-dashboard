@@ -29,7 +29,8 @@ const ONLINE: WorkerInfo = { workerId: 'w1', hostname: 'mac', lastSeenAt: '', on
 interface Api {
   scope?: string
   workers?: WorkerInfo[]
-  active?: RemediationJob[]
+  /** `GET …/jobs`: los jobs del repo, el más reciente primero. */
+  jobs?: RemediationJob[]
   create?: () => Response
   /** Respuestas sucesivas de `GET …/jobs/{id}` (la última se repite). */
   polls?: RemediationJob[]
@@ -45,7 +46,7 @@ function mockApi(api: Api) {
     const method = init?.method ?? 'GET'
     if (url.endsWith('/key')) return json({ name: 'dash', prefix: 'ab12', scope: api.scope ?? 'operate' })
     if (url.endsWith('/workers')) return json(api.workers ?? [ONLINE])
-    if (url.includes('/jobs?active=true')) return json(api.active ?? [])
+    if (url.endsWith(`/repositories/${SLUG}/jobs`) && method === 'GET') return json(api.jobs ?? [])
     if (url.endsWith('/cancel') && method === 'POST') return json(api.cancel)
     if (url.endsWith(`/repositories/${SLUG}/jobs`) && method === 'POST') return api.create ? api.create() : json(job(), 201)
     if (url.includes('/jobs/')) return json(polls.length > 1 ? polls.shift() : polls[0])
@@ -58,10 +59,18 @@ function mockApi(api: Api) {
 const calls = (f: ReturnType<typeof mockApi>, pred: (url: string, method: string) => boolean) =>
   f.mock.calls.filter(([u, i]) => pred(String(u), (i as RequestInit | undefined)?.method ?? 'GET'))
 
-async function renderRepo(connected = true) {
+/** El dataset del tenant con `fixdeps` de SLUG ya `done` en la API (su último run terminó). */
+function fixdepsDone() {
+  const d = tenantDataset()
+  const row = d.fleet.repositories.find((r) => r.slug === SLUG)!
+  row.demoState.phases = row.demoState.phases.map((p) => (p.phase === 'fixdeps' ? { ...p, status: 'done' } : p))
+  return d
+}
+
+async function renderRepo(connected = true, dataset = tenantDataset) {
   if (connected) setConnection({ tenant: 'acme', key: 'vk_ab12_secret' })
   location.hash = '#/repo/' + (connected ? SLUG : 'vega-web')
-  const load = vi.fn((c: Connection | null) => Promise.resolve(c ? tenantDataset() : demoDataset()))
+  const load = vi.fn((c: Connection | null) => Promise.resolve(c ? dataset() : demoDataset()))
   render(<App load={load} />)
   await screen.findByText('Fases de remediación')
   // deja resolver key/workers/job activo
@@ -131,9 +140,44 @@ describe('runner real (portfolio conectado)', () => {
     expect(card('fixcode')).toHaveTextContent('1/2 unidades')
     expect(card('fixcode')).toHaveTextContent('en curso')
     await tick()
-    expect(card('fixcode')).toHaveTextContent('parcial')
-    expect(card('fixcode')).toHaveTextContent('1 unidades saltadas')
+    expect(card('fixcode')).toHaveTextContent('1 salteadas, 1 corregidas')
+    expect(card('fixcode')).toHaveTextContent('50%')
     expect(load).toHaveBeenCalledTimes(2)
+  })
+
+  it('con todas las unidades salteadas no dice «completado» ni 100%', async () => {
+    mockApi({
+      polls: [
+        job({
+          status: 'partial',
+          phases: ['fixdeps'],
+          currentPhase: 'fixdeps',
+          progress: { fixdeps: { total: 4, doing: 0, done: 0, skipped: 4 } },
+          phaseResults: { fixdeps: { exitCode: 0, exitName: 'OK' } },
+        }),
+      ],
+    })
+    await renderRepo()
+    await act(async () => fireEvent.click(cardButton('fixdeps')))
+    await tick()
+    expect(card('fixdeps')).toHaveTextContent('4 salteadas, 0 corregidas')
+    expect(card('fixdeps')).not.toHaveTextContent('completado')
+    expect(card('fixdeps')).toHaveTextContent('0%')
+  })
+
+  it('al abrir el proyecto, el último job terminado explica la fase que la API da por hecha', async () => {
+    const finished = job({
+      status: 'partial',
+      phases: ['fixdeps', 'fixcode'],
+      progress: { fixdeps: { total: 4, doing: 0, done: 0, skipped: 4 }, fixcode: { total: 2, doing: 0, done: 0, skipped: 2 } },
+      phaseResults: { fixdeps: { exitCode: 0, exitName: 'OK' }, fixcode: { exitCode: 0, exitName: 'OK' } },
+    })
+    const f = mockApi({ jobs: [finished] })
+    await renderRepo(true, fixdepsDone)
+    expect(card('fixdeps')).toHaveTextContent('4 salteadas, 0 corregidas')
+    // fixcode sigue pendiente en la API (p. ej. un review posterior): el job viejo no la pisa
+    expect(card('fixcode')).toHaveTextContent('pendiente')
+    expect(calls(f, (u) => u.includes('/jobs/'))).toHaveLength(0)
   })
 
   it('un fallo muestra el motivo legible y el exit code', async () => {
@@ -163,7 +207,7 @@ describe('runner real (portfolio conectado)', () => {
       currentPhase: 'fixdeps',
       progress: { fixdeps: { total: 4, doing: 1, done: 2, skipped: 0 } },
     })
-    const f = mockApi({ active: [running], polls: [running] })
+    const f = mockApi({ jobs: [running], polls: [running] })
     await renderRepo()
     expect(card('fixdeps')).toHaveTextContent('2/4 unidades')
     expect(card('fixcode')).toHaveTextContent('en espera')
@@ -190,7 +234,7 @@ describe('runner real (portfolio conectado)', () => {
   })
 
   it('un job en cola sin workers elegibles lo explica', async () => {
-    mockApi({ active: [job({ eligibleWorkers: 0 })], polls: [job({ eligibleWorkers: 0 })] })
+    mockApi({ jobs: [job({ eligibleWorkers: 0 })], polls: [job({ eligibleWorkers: 0 })] })
     await renderRepo()
     expect(card('fixcode')).toHaveTextContent('ningún worker conectado tiene este repo clonado')
   })

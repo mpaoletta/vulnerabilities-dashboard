@@ -12,6 +12,7 @@ import { useDataset } from '../../data/context'
 import type { FleetRepository } from '../../data/types'
 import { n, t, typeBg, typeFg, usd } from '../../domain/format'
 import { progress } from '../../domain/phases'
+import { UnreviewedSection } from './UnreviewedSection'
 import layout from '../shared/layout.module.css'
 import styles from './PortfolioView.module.css'
 
@@ -233,6 +234,8 @@ export function PortfolioView() {
           ))}
         </Card>
       </section>
+
+      <UnreviewedSection />
 
       <Card as="section" pad="none" className={styles.tableCard}>
         <div className={styles.toolbar}>
