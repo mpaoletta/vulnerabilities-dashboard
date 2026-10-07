@@ -5,7 +5,7 @@ import type { RemediationJob, WorkerInfo } from '../data/types'
 import { demoDataset } from '../test/dataset'
 import { tenantDataset } from '../test/tenantDataset'
 import App from './App'
-import { LOCAL_ONLY_MSG, POLL_MS } from './jobRunner'
+import { LOCAL_ONLY_MSG, POLL_MS, REVIEW_RUNNING_MSG } from './jobRunner'
 
 const SLUG = 'legacy-web'
 const card = (phase: string) => document.querySelector(`[data-phase="${phase}"]`) as HTMLElement
@@ -211,6 +211,35 @@ describe('runner real (portfolio conectado)', () => {
     await renderRepo()
     expect(card('fixdeps')).toHaveTextContent('2/4 unidades')
     expect(card('fixcode')).toHaveTextContent('en espera')
+    expect(calls(f, (_u, m) => m === 'POST')).toHaveLength(0)
+  })
+
+  it('un re-review lanzado desde el repo bloquea las fases hasta que termina', async () => {
+    const review = job({ id: 'rev-1', status: 'queued', phases: ['review'] })
+    const f = mockApi({ create: () => json(review, 201), polls: [review] })
+    vi.spyOn(window, 'confirm').mockReturnValue(true)
+    await renderRepo()
+    expect(cardButton('fixdeps')).not.toBeDisabled()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Re-ejecutar review' }))
+    await act(async () => {})
+
+    expect(cardButton('fixdeps')).toBeDisabled()
+    expect(card('fixdeps')).toHaveTextContent(REVIEW_RUNNING_MSG)
+    expect(screen.getByRole('button', { name: 'Ejecutar las 3 fases en secuencia' })).toBeDisabled()
+    fireEvent.click(cardButton('fixdeps'))
+    const posts = calls(f, (_u, m) => m === 'POST')
+    expect(posts).toHaveLength(1) // sólo el review: ningún job de fixdeps que la API rechace con 409
+    expect(JSON.parse(String((posts[0][1] as RequestInit).body))).toEqual({ phases: ['review'] })
+  })
+
+  it('un review activo creado en otra pestaña también bloquea las fases', async () => {
+    const review = job({ id: 'rev-2', status: 'running', phases: ['review'] })
+    const f = mockApi({ jobs: [review], polls: [review] })
+    await renderRepo()
+    expect(cardButton('fixdeps')).toBeDisabled()
+    expect(card('fixdeps')).toHaveTextContent(REVIEW_RUNNING_MSG)
+    expect(screen.getByRole('button', { name: 'Ejecutar las 3 fases en secuencia' })).toBeDisabled()
     expect(calls(f, (_u, m) => m === 'POST')).toHaveLength(0)
   })
 

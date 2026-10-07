@@ -70,7 +70,16 @@ function waitingMsg(job: RemediationJob): string {
   return 'esperando la fase anterior'
 }
 
-export function useJobRunner(store: Store, data: Dataset, connection: Connection | null): PhaseRunner {
+/** Motivo de bloqueo de las fases mientras el repo tiene un review en curso. */
+export const REVIEW_RUNNING_MSG = 'hay un review en curso: al terminar cambian las unidades a corregir'
+
+export function useJobRunner(
+  store: Store,
+  data: Dataset,
+  connection: Connection | null,
+  /** Si el repo tiene un review en curso (lo lleva `reviewRunner`, no este runner). */
+  reviewing?: (slug: string) => boolean,
+): PhaseRunner {
   const { dispatch, get } = store
   const reload = useDatasetReload()
   const [jobs, setJobs] = useState<Record<string, RemediationJob | null>>({})
@@ -219,13 +228,15 @@ export function useJobRunner(store: Store, data: Dataset, connection: Connection
   const blockReason = useCallback(
     (slug: string, phases: FixPhaseKey[]): string | null => {
       if (keyInfo?.scope === 'read') return 'la key es de sólo lectura'
-      if (isActive(jobs[slug])) return 'el repo ya tiene un job en curso'
+      if (reviewing?.(slug)) return REVIEW_RUNNING_MSG
+      const job = jobs[slug]
+      if (isActive(job)) return job?.phases.includes('review') ? REVIEW_RUNNING_MSG : 'el repo ya tiene un job en curso'
       if (busy[slug]) return 'creando el job…'
       const plan = planFor(data, store.state, slug)
       if (!plan || !jobBody(phases, plan.bySel).phases.length) return 'no hay unidades seleccionadas'
       return null
     },
-    [busy, data, jobs, keyInfo, store.state],
+    [busy, data, jobs, keyInfo, reviewing, store.state],
   )
 
   const launch = useCallback(

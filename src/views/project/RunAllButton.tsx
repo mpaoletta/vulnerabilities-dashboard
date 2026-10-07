@@ -19,7 +19,9 @@ export function RunAllButton({ slug, row }: { slug: string; row: FleetRepository
 
   if (real) {
     // Un único job con las fases que tienen unidades seleccionadas.
-    const active = isActive(real.job(slug))
+    // Sólo un job de fix cuenta como «en curso» acá; durante un review se muestra el motivo.
+    const job = real.job(slug)
+    const active = isActive(job) && !job?.phases.includes('review')
     const reason = real.blockReason(slug, [...ORDER])
     return (
       <>

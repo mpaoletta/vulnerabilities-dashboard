@@ -46,9 +46,14 @@ export function usePhaseRunnerContext(): PhaseRunner {
 }
 
 /** El runner que corresponde a la fuente: real con un portfolio, simulado en la demo. */
-export function usePhaseRunner(store: Store, data: Dataset, connection: Connection | null = null): PhaseRunner {
+export function usePhaseRunner(
+  store: Store,
+  data: Dataset,
+  connection: Connection | null = null,
+  reviewing?: (slug: string) => boolean,
+): PhaseRunner {
   const simulated = useSimulatedRunner(store, data)
-  const real = useJobRunner(store, data, data.meta.source === 'database' ? connection : null)
+  const real = useJobRunner(store, data, data.meta.source === 'database' ? connection : null, reviewing)
   return data.meta.source === 'database' && connection ? real : simulated
 }
 

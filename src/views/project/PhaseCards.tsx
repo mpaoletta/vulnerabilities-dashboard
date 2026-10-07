@@ -29,6 +29,9 @@ export function PhaseCards({ slug, row, est, totalVulns, clean }: Props) {
   }, [real, slug])
   const job = real?.job(slug) ?? null
   const jobActive = isActive(job)
+  // Un job de fix activo ya muestra su avance en las tarjetas; uno de review no, así que su
+  // motivo de bloqueo sí se muestra.
+  const fixJobActive = jobActive && !job?.phases.includes('review')
   const statusOf = (k: FixPhaseKey) => phaseStatus(row, k, state.phases[phaseKey(slug, k)])
   const anyRunning = real ? jobActive : ORDER.some((k) => state.phases[phaseKey(slug, k)]?.run)
 
@@ -196,7 +199,7 @@ export function PhaseCards({ slug, row, est, totalVulns, clean }: Props) {
               >
                 {c.btnLabel}
               </button>
-              {c.reason && !jobActive && (
+              {c.reason && !fixJobActive && (
                 <span className={styles.reason}>{c.reason}</span>
               )}
             </div>

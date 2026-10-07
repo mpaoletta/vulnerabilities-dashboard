@@ -1,6 +1,7 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { connectionId, useConnection, type Connection } from '../data/connection'
 import { useDataset } from '../data/context'
+import { isActive } from '../data/jobs'
 import { DatasetProvider } from '../data/DatasetProvider'
 import type { Dataset } from '../data/types'
 import { TourOverlay } from '../tour/TourOverlay'
@@ -25,9 +26,11 @@ export const TOUR_DEEPLINK_DELAY_MS = 400
 function ExecutionProvider({ children }: { children: ReactNode }) {
   const data = useDataset()
   const connection = useConnection()
-  const runner = usePhaseRunner(useStore(), data, connection)
   const real = data.meta.source === 'database' && connection ? connection : null
   const reviews = useReviewRunner(real)
+  // Un review en curso reemplaza las unidades a corregir: las fases esperan a que termine.
+  const reviewing = useCallback((slug: string) => isActive(reviews.job(slug)), [reviews])
+  const runner = usePhaseRunner(useStore(), data, connection, reviewing)
   return (
     <PhaseRunnerContext.Provider value={runner}>
       <ReviewRunnerContext.Provider value={real ? reviews : null}>{children}</ReviewRunnerContext.Provider>
