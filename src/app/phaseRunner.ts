@@ -1,20 +1,40 @@
-// Controller de la ejecución simulada de fases (port de `startPhase`): 10 ticks de
-// 420 ms, snapshot al arrancar, una fase por vez por repo y encadenado a 500 ms.
+// Controller de la ejecución de fases. Dos implementaciones detrás de `PhaseRunner`:
+// - simulada (demo, port de `startPhase`): 10 ticks de 420 ms, snapshot al arrancar, una fase
+//   por vez por repo y encadenado a 500 ms;
+// - real (`meta.source === 'database'`, ver `jobRunner.ts`): encola un job en la API y refleja
+//   su estado.
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef } from 'react'
-import type { Dataset, FixPhaseKey } from '../data/types'
+import type { Connection } from '../data/connection'
+import type { Dataset, FixPhaseKey, RemediationJob } from '../data/types'
 import { estimate } from '../domain/estimate'
 import { itemsFor } from '../domain/items'
 import { blockedBy, nextAfter, ORDER, phaseKey, phaseStatus } from '../domain/phases'
+import { useJobRunner } from './jobRunner'
 import { selectionFor, type Store } from './store'
 
 export const TICK_MS = 420
 export const TICKS = 10
 export const CHAIN_DELAY_MS = 500
 
+/** Lo que sólo tiene el runner real (jobs de la API). */
+export interface RealRunner {
+  /** Por qué no se puede ejecutar `phases` en el repo (`null` = se puede). */
+  blockReason: (slug: string, phases: FixPhaseKey[]) => string | null
+  /** Último job conocido del repo (activo o terminado en esta sesión). */
+  job: (slug: string) => RemediationJob | null
+  /** Error del último intento de crear/cancelar un job. */
+  error: (slug: string) => string | null
+  cancel: (slug: string) => void
+  /** Al abrir el repo: carga scope de la key y workers, y retoma su job activo. */
+  watch: (slug: string) => void
+}
+
 export interface PhaseRunner {
   start: (slug: string, key: FixPhaseKey, chain?: boolean) => void
   /** Arranca la primera fase pendiente y encadena las siguientes. */
   runAll: (slug: string) => void
+  /** Presente sólo con un portfolio real. */
+  real?: RealRunner
 }
 
 export const PhaseRunnerContext = createContext<PhaseRunner | null>(null)
@@ -25,7 +45,19 @@ export function usePhaseRunnerContext(): PhaseRunner {
   return r
 }
 
-export function usePhaseRunner(store: Store, data: Dataset): PhaseRunner {
+/** El runner que corresponde a la fuente: real con un portfolio, simulado en la demo. */
+export function usePhaseRunner(
+  store: Store,
+  data: Dataset,
+  connection: Connection | null = null,
+  reviewing?: (slug: string) => boolean,
+): PhaseRunner {
+  const simulated = useSimulatedRunner(store, data)
+  const real = useJobRunner(store, data, data.meta.source === 'database' ? connection : null, reviewing)
+  return data.meta.source === 'database' && connection ? real : simulated
+}
+
+export function useSimulatedRunner(store: Store, data: Dataset): PhaseRunner {
   const intervals = useRef(new Map<string, ReturnType<typeof setInterval>>())
   const timeouts = useRef(new Set<ReturnType<typeof setTimeout>>())
   const chained = useRef(new Set<string>())

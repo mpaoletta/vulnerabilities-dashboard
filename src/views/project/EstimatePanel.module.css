@@ -193,6 +193,12 @@
   background: var(--bordo);
 }
 
+.runBtn:disabled {
+  background: var(--line2);
+  color: var(--fg3);
+  cursor: default;
+}
+
 .disclaimer {
   display: block;
   margin-top: 9px;

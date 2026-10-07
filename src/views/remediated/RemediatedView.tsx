@@ -19,6 +19,8 @@ export function RemediatedView({ qaOwner = DEFAULT_QA_OWNER }: { qaOwner?: strin
   const { state, dispatch } = useStore()
   const qa = state.qa
   const list = D.fleet.repositories.filter((r) => r.demoState.stage === 'remediated')
+  // Con datos reales no hay PR simulado que mostrar.
+  const simulatedPr = D.meta.source !== 'database'
 
   let fixedTot = 0
   let tTot = 0
@@ -84,7 +86,7 @@ export function RemediatedView({ qaOwner = DEFAULT_QA_OWNER }: { qaOwner?: strin
                   <b>{n(r.units.fixdeps + r.units.fixcode + r.units.fixsecrets)}</b>
                 </div>
               </div>
-              <div className={`${styles.col} ${styles.colTight}`}>
+              <div className={`${styles.col} ${styles.colTight}${simulatedPr ? '' : ` ${styles.colLast}`}`}>
                 <span className={styles.colLabel}>Estimado por fase</span>
                 {ORDER.map((k) => (
                   <div key={k} className={styles.kv}>
@@ -101,15 +103,17 @@ export function RemediatedView({ qaOwner = DEFAULT_QA_OWNER }: { qaOwner?: strin
                   </b>
                 </div>
               </div>
-              <div className={`${styles.col} ${styles.colTight} ${styles.colLast}`}>
-                <span className={styles.colLabel}>Pull request (simulado)</span>
-                <span className={styles.pr}>PR #{1200 + (hash(r.slug) % 700)}</span>
-                <span className={styles.prMeta}>
-                  {n(r.units.fixdeps + r.units.fixcode)} commits · {n(r.unitDetail.sastFiles + r.unitDetail.secretFiles)} archivos
-                  tocados
-                </span>
-                <span className={styles.branch}>remediation/{r.slug}</span>
-              </div>
+              {simulatedPr && (
+                <div className={`${styles.col} ${styles.colTight} ${styles.colLast}`}>
+                  <span className={styles.colLabel}>Pull request (simulado)</span>
+                  <span className={styles.pr}>PR #{1200 + (hash(r.slug) % 700)}</span>
+                  <span className={styles.prMeta}>
+                    {n(r.units.fixdeps + r.units.fixcode)} commits · {n(r.unitDetail.sastFiles + r.unitDetail.secretFiles)} archivos
+                    tocados
+                  </span>
+                  <span className={styles.branch}>remediation/{r.slug}</span>
+                </div>
+              )}
             </div>
             <div data-tour={'flows-' + r.slug} className={styles.flows}>
               <div className={styles.flowsHead}>

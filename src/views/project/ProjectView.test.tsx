@@ -1,8 +1,9 @@
-import { act, fireEvent, screen, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { renderApp } from '../../test/renderApp'
 import { itemsFor } from '../../domain/items'
 import { demoDataset } from '../../test/dataset'
+import App from '../../app/App'
 
 const SLUG = 'vega-web'
 
@@ -120,5 +121,19 @@ describe('Proyecto', () => {
   it('slug inexistente muestra el Portfolio', async () => {
     await renderApp('#/repo/no-existe')
     expect(screen.getByText('70 de 70 repositorios')).toBeInTheDocument()
+  })
+
+  it('la tarjeta muestra lo que corrigió la última corrida aunque la fase vuelva a pendiente', async () => {
+    location.hash = '#/repo/' + SLUG
+    const data = demoDataset()
+    const row = data.fleet.repositories.find((r) => r.slug === SLUG)!
+    row.lastRun = { fixcode: { status: 'partial', exitCode: 1, fixed: 15, notFixed: 2 } }
+    render(<App load={() => Promise.resolve(data)} />)
+    await screen.findByText('remediación automatizada de vulnerabilidades')
+    expect(cardButton('fixcode')).not.toHaveTextContent('Ejecutada')
+    expect(card('fixcode')).toHaveTextContent(
+      'última corrida: 15 corregidas · 2 sin corregir · parcial · policy gate no pasa',
+    )
+    expect(card('fixdeps')).not.toHaveTextContent('última corrida')
   })
 })

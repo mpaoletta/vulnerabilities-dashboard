@@ -1,4 +1,6 @@
 // Routing por hash: `#/dashboard`, `#/repo/:slug`, `#/remediados` y `#/tour`.
+import { READONLY } from './edition'
+
 export type Route = { name: 'dashboard' } | { name: 'repo'; slug: string } | { name: 'remediados' } | { name: 'tour' }
 
 export function parseHash(hash: string): Route {
@@ -29,9 +31,13 @@ export function routeHash(route: Route): string {
   }
 }
 
-/** Ruta efectiva: un slug que no está en el dataset cae al Portfolio. */
-export function resolveRoute(route: Route, hasRepo: (slug: string) => boolean): Route {
+/**
+ * Ruta efectiva: un slug que no está en el dataset cae al Portfolio. En la edición
+ * review, `#/remediados` no existe y también cae al Portfolio.
+ */
+export function resolveRoute(route: Route, hasRepo: (slug: string) => boolean, readonly = READONLY): Route {
   if (route.name === 'repo' && !hasRepo(route.slug)) return { name: 'dashboard' }
+  if (route.name === 'remediados' && readonly) return { name: 'dashboard' }
   if (route.name === 'tour') return { name: 'dashboard' }
   return route
 }

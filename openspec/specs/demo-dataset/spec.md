@@ -2,22 +2,24 @@
 
 ## Purpose
 
-Carga del dataset de demo, tipos del modelo de datos, formato de valores (números, tiempos, USD) y el módulo de acceso a datos que va a reemplazar la API.
+Carga del dataset de demo, tipos del modelo de datos, formato de valores (números, tiempos, USD) y el módulo de acceso a datos que lo obtiene de `vulnerabilities-api`.
 
 ## Requirements
 
 ### Requirement: Dataset de demo como fuente única
-La app SHALL obtener todos sus datos del dataset `demo-data.js` del handoff (`window.RB_DATA`),
-servido como asset estático, con `meta`, `fleet` y `repositories[slug]`. Ningún componente MUST
-leer `window.RB_DATA` directamente: el acceso MUST pasar por un único módulo de datos que expone
-el dataset tipado.
+La app SHALL obtener todos sus datos de `vulnerabilities-api` con `GET {VITE_API_BASE_URL}/dataset`
+(por defecto `/api/dataset`), que hoy sirve el dataset de demo del handoff con `meta`, `fleet` y
+`repositories[slug]`. Ningún componente MUST hacer `fetch` a la API ni conocer su URL: el acceso MUST
+pasar por un único módulo de datos (`src/data/source.ts`) que expone el dataset tipado. La app MUST NOT
+depender de `window.RB_DATA` ni de `public/demo-data.js`.
 
 #### Scenario: Acceso encapsulado
-- **WHEN** se busca `RB_DATA` en `src/`
-- **THEN** sólo aparece dentro del módulo de acceso a datos
+- **WHEN** se busca `fetch(` y `VITE_API_BASE_URL` en `src/` (fuera de los tests)
+- **THEN** sólo aparecen dentro del módulo de acceso a datos
+- **AND** `RB_DATA` no aparece en `src/`
 
 #### Scenario: Dataset cargado
-- **GIVEN** `demo-data.js` servido junto a la app
+- **GIVEN** `vulnerabilities-api` corriendo con la fuente demo
 - **WHEN** la app arranca
 - **THEN** el Portfolio muestra los 70 repositorios de `fleet.repositories`
 

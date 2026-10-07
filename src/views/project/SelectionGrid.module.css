@@ -61,6 +61,12 @@
   font-weight: 700;
 }
 
+.unitNote {
+  flex-basis: 100%;
+  font-size: 11px;
+  color: var(--fg3);
+}
+
 .body {
   height: 430px;
   overflow: auto;

@@ -1,10 +1,13 @@
 import { useMemo } from 'react'
-import { usePhaseRunnerContext } from '../../app/phaseRunner'
+import { READONLY } from '../../app/edition'
+import { useReviewRunnerContext } from '../../app/reviewRunner'
 import { selectionFor, useStore } from '../../app/store'
 import { Card } from '../../components/Card'
 import { Donut } from '../../components/Donut'
 import { Hexagon } from '../../components/Hexagon'
+import { ReviewControls } from '../../components/ReviewControls'
 import { SectionLabel } from '../../components/SectionLabel'
+import { useConnection } from '../../data/connection'
 import { useDataset } from '../../data/context'
 import type { FleetRepository } from '../../data/types'
 import { estimate } from '../../domain/estimate'
@@ -13,6 +16,8 @@ import { itemsFor } from '../../domain/items'
 import layout from '../shared/layout.module.css'
 import { EstimatePanel } from './EstimatePanel'
 import { PhaseCards } from './PhaseCards'
+import { PullRequestsPanel } from './PullRequestsPanel'
+import { RunAllButton } from './RunAllButton'
 import { SelectionGrid } from './SelectionGrid'
 import styles from './ProjectView.module.css'
 
@@ -24,8 +29,9 @@ const blockName = (b: unknown) =>
 
 export function ProjectView({ slug }: { slug: string }) {
   const D = useDataset()
+  const connection = useConnection()
+  const reviews = useReviewRunnerContext()
   const { state } = useStore()
-  const runner = usePhaseRunnerContext()
   const R = D.fleet.repositories
   const row = R.find((r) => r.slug === slug)!
   const d = D.repositories[slug]
@@ -148,6 +154,9 @@ export function ProjectView({ slug }: { slug: string }) {
           ))}
         </div>
       </div>
+
+      {/* add-worker-triggered-review: sólo con un portfolio real (el contexto es null en la demo). */}
+      {reviews && <ReviewControls runner={reviews} slug={slug} rerun />}
 
       <section data-tour="hero" className={styles.hero}>
         <Card pad="lg" data-tour="hero-tipo" className={styles.heroCard}>
@@ -284,10 +293,20 @@ export function ProjectView({ slug }: { slug: string }) {
 
       <section className={styles.work}>
         <SelectionGrid slug={slug} row={row} detail={d} items={items} sel={sel} est={est} />
-        <EstimatePanel slug={slug} row={row} items={items} est={est} totalVulns={totalVulns} onRunAll={() => runner.runAll(slug)} />
+        <EstimatePanel
+          row={row}
+          items={items}
+          est={est}
+          totalVulns={totalVulns}
+          runAll={READONLY ? undefined : <RunAllButton slug={slug} row={row} />}
+        />
       </section>
 
-      <PhaseCards slug={slug} row={row} est={est} totalVulns={totalVulns} clean={clean} />
+      {/* Ejecución de la remediación: no existe en la edición review. */}
+      {!READONLY && <PhaseCards slug={slug} row={row} est={est} totalVulns={totalVulns} clean={clean} />}
+
+      {/* Gates de PR (add-github-pr-gate): sólo con un portfolio real conectado. */}
+      {!READONLY && D.meta.source === 'database' && connection && <PullRequestsPanel slug={slug} connection={connection} />}
     </main>
   )
 }

@@ -64,3 +64,23 @@ describe('buildTourSteps', () => {
     steps.forEach((s) => expect(!!s.target).toBe(!s.plate))
   })
 })
+
+describe('buildTourSteps en la edición review', () => {
+  const full = buildTourSteps(D, false)
+  const review = buildTourSteps(D, true)
+  it('omite los 2 pasos de ejecución y conserva el resto en orden', () => {
+    expect(review).toHaveLength(full.length - 2)
+    expect(review.map((s) => s.title)).toEqual(full.filter((s) => !s.execution).map((s) => s.title))
+    expect(review.map((s) => s.idx)).toEqual(review.map((_, i) => i))
+    expect(review.at(-1)!.closing).toBe(true)
+  })
+  it('ningún paso apunta a fases, flujos de QA ni Remediados', () => {
+    expect(review.some((s) => s.target === '[data-tour="fases"]')).toBe(false)
+    expect(review.some((s) => (s.target || '').startsWith('[data-tour="flows-'))).toBe(false)
+    expect(review.some((s) => s.route === '#/remediados')).toBe(false)
+  })
+  it('la edición full no cambia', () => {
+    expect(full).toHaveLength(22)
+    expect(full.filter((s) => s.execution)).toHaveLength(2)
+  })
+})

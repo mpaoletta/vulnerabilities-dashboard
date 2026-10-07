@@ -1,0 +1,81 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
+.toggle {
+  font-weight: 700;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.branch {
+  color: inherit;
+}
+
+.sha,
+.date,
+.count,
+.note {
+  font-size: 12px;
+  color: var(--fg3);
+}
+
+.notice {
+  font-size: 12.5px;
+  margin: 0;
+}
+
+.keys {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12.5px;
+}
+
+.form textarea {
+  width: 100%;
+  font: inherit;
+}
